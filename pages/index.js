@@ -2,37 +2,59 @@ import { useState, useCallback } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 
-const EMAIL_SUBJECT =
-  'Constituent Safety Concern: IRGC-Linked Violence in Our Community';
+function getLastName(fullName) {
+  if (!fullName) return 'MP';
+  const parts = fullName.trim().split(/\s+/);
+  return parts[parts.length - 1];
+}
 
-function buildEmailBody(mpName, personalNote) {
-  const greeting = mpName ? `Dear ${mpName},` : 'Dear [MP Name],';
-  const personalParagraph = personalNote && personalNote.trim()
+function isGoverningParty(party) {
+  if (!party) return false;
+  return /liberal/i.test(party);
+}
+
+function buildSubject(riding) {
+  if (riding) return `Constituent Concern: IRGC-Linked Violence — ${riding}`;
+  return 'Constituent Safety Concern: IRGC-Linked Violence in Our Community';
+}
+
+function buildEmailBody(mpName, party, riding, personalNote) {
+  const lastName = getLastName(mpName);
+  const greeting = `Dear Mr./Ms. ${lastName},`;
+  const personalLine = personalNote && personalNote.trim()
     ? `\n${personalNote.trim()}\n`
     : '';
+  const ridingLine = riding ? `Constituent, ${riding}` : '[Your Address and Riding]';
+
+  const governing = isGoverningParty(party);
+
+  const actionParagraph = governing
+    ? `As a member of the governing party, you have direct influence over these decisions. I am asking you to bring the following to your caucus and the relevant ministers:`
+    : `I am asking you to hold the government accountable on the following and raise them in the House, in committee, and with the relevant ministers:`;
+
+  const closingLine = governing
+    ? `Canada has the laws. Your government has the mandate. Please act.`
+    : `No community should live under the threat of foreign political violence. Please use your platform to push for action.`;
+
   return `${greeting}
 
 I am a constituent writing to raise an urgent safety concern.
-${personalParagraph}
-On March 10, 2026, shots were fired at the U.S. Consulate in Toronto. Days earlier, a boxing club in Richmond Hill owned by a prominent Iranian-Canadian dissident was hit by 17 rounds of gunfire. Jewish institutions in Toronto have faced similar attacks. These are not isolated incidents. Security officials have described a pattern of foreign-backed intimidation tied to networks operating on behalf of Iran's Islamic Revolutionary Guard Corps.
+${personalLine}
+On March 10, 2026, shots were fired at the U.S. Consulate in Toronto. Days before, a boxing club in Richmond Hill owned by an Iranian-Canadian dissident was hit by 17 rounds of gunfire. Security officials have described a pattern of foreign intimidation tied to Iran's Islamic Revolutionary Guard Corps operating on Canadian soil.
 
-Canada already has the tools to act. The IRGC was listed as a terrorist entity under the Criminal Code in June 2024. The government has sanctioned individuals for IRGC-linked activities targeting dissidents here. Canada joined international partners in condemning Iranian state threat activity in North America. The legal tools are in place. What is needed now is action.
+The legal tools are already in place. The IRGC has been a listed terrorist entity under the Criminal Code since June 2024. Canada has sanctions authority under the Special Economic Measures Act (SEMA). What is missing is enforcement.
 
-Canada has moved quickly before. When Russia invaded Ukraine, Canada was the first country to amend the Special Economic Measures Act to allow asset seizure and forfeiture. The same authority exists here and should be used.
+${actionParagraph}
 
-I am asking you to push the government on three things:
+1. Direct the RCMP and CSIS to investigate these incidents as IRGC-linked transnational repression and prosecute those responsible.
+2. Use existing SEMA powers to identify and freeze assets tied to sanctioned IRGC networks in Canada.
+3. Engage openly with Iranian-Canadian communities about the threat and what is being done.
 
-1. Direct the RCMP and CSIS to investigate the Toronto shootings as potential IRGC-linked transnational repression and prosecute those responsible.
-2. Use existing powers under the Special Economic Measures Act (SEMA) to identify and freeze assets tied to sanctioned IRGC networks operating in Canada.
-3. Engage directly and openly with Iranian-Canadian communities about the threat and what is being done to address it.
-
-We are not asking for new legislation. We are asking Canada to use the laws it already has. No community in this country should be living under the threat of foreign political violence, and Canadians of Iranian heritage deserve the same protection as everyone else.
-
-I would be glad to speak with you or your office about this.
+${closingLine}
 
 Sincerely,
 [Your Name]
-[Your Address and Riding]`;
+${ridingLine}`;
 }
 
 function normalizePostalCode(raw) {
@@ -131,7 +153,7 @@ export default function Home() {
       }
 
       setMp(data);
-      setMessage(buildEmailBody(data.name, personalNote));
+      setMessage(buildEmailBody(data.name, data.party, data.riding, personalNote));
     } catch {
       setError('Network error - please check your connection and try again.');
     } finally {
@@ -146,12 +168,12 @@ export default function Home() {
   // Rebuild email whenever personal note changes (after MP is loaded)
   const handlePersonalNoteChange = (e) => {
     setPersonalNote(e.target.value);
-    if (mp) setMessage(buildEmailBody(mp.name, e.target.value));
+    if (mp) setMessage(buildEmailBody(mp.name, mp.party, mp.riding, e.target.value));
   };
 
   const buildMailtoLink = () => {
     if (!mp?.email) return '#';
-    const subject = encodeURIComponent(EMAIL_SUBJECT);
+    const subject = encodeURIComponent(buildSubject(mp.riding));
     const body = encodeURIComponent(message);
     return `mailto:${encodeURIComponent(mp.email)}?subject=${subject}&body=${body}`;
   };
@@ -377,7 +399,7 @@ export default function Home() {
 
             <div className="personal-note-wrapper">
               <label className="personal-note-label" htmlFor="personal-note">
-                Add a personal sentence <span className="personal-note-hint">(optional — makes your email much more effective)</span>
+                Why does this matter to you? <span className="personal-note-hint">(optional — one sentence, e.g. your Iranian heritage, your community, your city)</span>
               </label>
               <textarea
                 id="personal-note"
@@ -385,7 +407,7 @@ export default function Home() {
                 rows={2}
                 value={personalNote}
                 onChange={handlePersonalNoteChange}
-                placeholder="e.g. I grew up in Richmond Hill and this community is my home."
+                placeholder="e.g. My family came to Canada from Iran, and I have friends in that Richmond Hill community."
               />
             </div>
           </div>
@@ -437,7 +459,7 @@ export default function Home() {
               {/* Subject line display */}
               <div className="subject-row">
                 <span className="subject-label">Subject</span>
-                <span className="subject-text">{EMAIL_SUBJECT}</span>
+                <span className="subject-text">{buildSubject(mp.riding)}</span>
               </div>
 
               {/* Editable message */}
