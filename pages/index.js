@@ -209,9 +209,15 @@ export default function Home() {
         <title>{t.pageTitle}</title>
         <meta name="description" content={t.pageDescription} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={`${process.env.NEXT_PUBLIC_SITE_URL || ''}/`} />
         <meta property="og:title" content={t.ogTitle} />
         <meta property="og:description" content={t.ogDescription} />
-        <meta property="og:image" content="/flags.jpg" />
+        <meta property="og:image" content={`${process.env.NEXT_PUBLIC_SITE_URL || ''}/flags.jpg`} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={t.ogTitle} />
+        <meta name="twitter:description" content={t.ogDescription} />
+        <meta name="twitter:image" content={`${process.env.NEXT_PUBLIC_SITE_URL || ''}/flags.jpg`} />
         <meta name="theme-color" content="#1e5428" />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
       </Head>
