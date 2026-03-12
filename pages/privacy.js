@@ -26,94 +26,53 @@ export default function Privacy() {
           <p className="prose-updated">Last updated: March 2026</p>
 
           <p>
-            This Privacy Policy explains how the <strong>Contact Your MP</strong> tool
-            (the &ldquo;Tool&rdquo;) handles information when you use it. This Tool is a
-            free civic resource built to help Canadian residents contact their federal
-            Member of Parliament. We have designed it from the ground up to collect as
-            little data as possible.
+            This tool is a free civic resource built to help Canadian residents contact
+            their federal Member of Parliament. It is designed to collect no personal data.
           </p>
 
-          <h2>1. Information We Do Not Collect</h2>
-          <p>We do not collect, store, or transmit:</p>
+          <h2>What this tool does not do</h2>
           <ul>
-            <li>Your name, email address, or any personal identifiers</li>
-            <li>Your postal code (it is used only to query a third-party API in real time and is not logged)</li>
-            <li>The contents of any message you draft or send</li>
-            <li>IP addresses beyond what your hosting provider&rsquo;s standard access logs may capture</li>
-            <li>Cookies or any local tracking data</li>
+            <li>No personal data is stored or transmitted by this site.</li>
+            <li>No cookies are used. No analytics. No tracking of any kind.</li>
+            <li>
+              The optional personal note field populates only in your own email client
+              when you click &ldquo;Open in Email Client.&rdquo; It is never sent to
+              or stored by this site.
+            </li>
           </ul>
 
-          <h2>2. How the Tool Works</h2>
+          <h2>How it works</h2>
           <p>
-            When you enter your postal code and click &ldquo;Find My MP&rdquo;, your postal
-            code is sent to our server-side API route, which immediately forwards it to the
-            publicly available{' '}
+            When you enter your postal code and click &ldquo;Find My MP&rdquo;, your
+            postal code is forwarded in real time to the publicly available{' '}
             <a href="https://represent.opennorth.ca/" target="_blank" rel="noopener noreferrer">
               Represent.ca API
             </a>{' '}
-            operated by Open North. The API returns your MP&rsquo;s name, riding, and email
-            address. This information is displayed to you in your browser and is never stored
-            on our servers.
+            (Open North), which returns your MP&rsquo;s name, riding, and email address.
+            This information is displayed in your browser and nothing is retained by
+            this site.
           </p>
           <p>
             When you click &ldquo;Open in Email Client&rdquo;, your browser opens a{' '}
-            <code>mailto:</code> link pre-filled with the subject and message body. No data
-            is sent to our servers at this step — the email is composed and sent entirely
-            through your own email application.
+            <code>mailto:</code> link. The email is composed and sent entirely through
+            your own email application. No data passes through our servers at this step.
           </p>
 
-          <h2>3. Third-Party Services</h2>
-          <ul>
-            <li>
-              <strong>Represent.ca (Open North)</strong> — We query this public API to look
-              up MP contact information. Please review{' '}
-              <a href="https://represent.opennorth.ca/" target="_blank" rel="noopener noreferrer">
-                Open North&rsquo;s policies
-              </a>{' '}
-              for information about how they handle API requests.
-            </li>
-            <li>
-              <strong>Netlify</strong> — This Tool is hosted on Netlify, which may collect
-              standard server access logs (IP addresses, request timestamps) as part of
-              normal hosting operations. Please refer to{' '}
-              <a href="https://www.netlify.com/privacy/" target="_blank" rel="noopener noreferrer">
-                Netlify&rsquo;s Privacy Policy
-              </a>{' '}
-              for details.
-            </li>
-          </ul>
-
-          <h2>4. Cookies and Tracking</h2>
+          <h2>Hosting</h2>
           <p>
-            This Tool does not use cookies, analytics trackers, advertising pixels, or any
-            other client-side tracking technology. No user profiling of any kind takes place.
+            This tool is hosted on Netlify, which may capture standard server access
+            logs (IP addresses, request timestamps) as part of normal hosting operations.
+            See{' '}
+            <a href="https://www.netlify.com/privacy/" target="_blank" rel="noopener noreferrer">
+              Netlify&rsquo;s Privacy Policy
+            </a>{' '}
+            for details.
           </p>
 
-          <h2>5. Children&rsquo;s Privacy</h2>
+          <h2>Contact</h2>
           <p>
-            This Tool is intended for use by Canadian residents who are eligible to contact
-            their elected representatives. We do not knowingly collect any information from
-            children under the age of 13.
-          </p>
-
-          <h2>6. Links to External Sites</h2>
-          <p>
-            This Tool contains links to external websites (e.g. ourcommons.ca, Open North).
-            We are not responsible for the privacy practices or content of those sites.
-          </p>
-
-          <h2>7. Changes to This Policy</h2>
-          <p>
-            If we make material changes to this Privacy Policy, we will update the
-            &ldquo;Last updated&rdquo; date at the top of this page. Continued use of the
-            Tool after any changes constitutes acceptance of the revised policy.
-          </p>
-
-          <h2>8. Contact</h2>
-          <p>
-            This Tool is maintained by community volunteers. If you have questions or
-            concerns about this Privacy Policy, please open an issue on our public repository
-            or reach out via the contact information listed there.
+            Questions or concerns:{' '}
+            <a href="mailto:baaham.ca@gmail.com">baaham.ca@gmail.com</a>
           </p>
 
           <p style={{ marginTop: '2rem' }}>

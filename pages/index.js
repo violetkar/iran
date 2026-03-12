@@ -284,38 +284,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── Why write to your MP ──────────────────────────────── */}
-        <section className="why-section" aria-label="Why contacting your MP matters">
-          <div className="why-inner">
-            <p className="why-title">
-              Why does writing to your MP actually matter?
-            </p>
-            <div className="stats-grid">
-              <div className="stat-card">
-                <div className="stat-number">10×</div>
-                <div className="stat-desc">
-                  A personal constituent letter carries roughly 10&times; the weight
-                  of a petition signature with most MPs.
-                </div>
-              </div>
-              <div className="stat-card">
-                <div className="stat-number">~95%</div>
-                <div className="stat-desc">
-                  Of MPs who receive constituent mail on an issue raise it in
-                  caucus, committee, or the House.
-                </div>
-              </div>
-              <div className="stat-card">
-                <div className="stat-number">Your right</div>
-                <div className="stat-desc">
-                  MPs are required by law to represent every constituent regardless
-                  of party or how you voted.
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* ── Urgency bar ───────────────────────────────────────── */}
         <div className="urgency-bar" role="note">
           <p>
@@ -537,6 +505,10 @@ export default function Home() {
               Salar Gholami&rsquo;s
             </a>{' '}
             call to action on Instagram.
+          </p>
+          <p style={{ marginTop: '0.4rem' }}>
+            Questions or media inquiries:{' '}
+            <a href="mailto:baaham.ca@gmail.com">baaham.ca@gmail.com</a>
           </p>
         </footer>
       </div>
