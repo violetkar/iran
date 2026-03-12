@@ -242,7 +242,7 @@ export default function Home() {
                   {t.demand2}
                   <span className="sema-expand">
                     {t.demand2Expand}
-                    <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2010-165/index.html" target="_blank" rel="noopener noreferrer">
+                    <a href={t.link4} target="_blank" rel="noopener noreferrer">
                       {t.demand2ExpandLink}
                     </a>.
                   </span>
@@ -266,20 +266,20 @@ export default function Home() {
           <p>
             <strong>{t.urgencyLabel}</strong>{' '}
             {t.urgencyText1}
-            <a className="cite" href="https://www.cbc.ca/news/canada/toronto/toronto-police-say-us-consulate-struck-by-gunfire-9.7121843" target="_blank" rel="noopener noreferrer" aria-label={`Source: ${t.srcCBC}`}>[1]</a>.
+            <a className="cite" href={t.link1} target="_blank" rel="noopener noreferrer" aria-label={`Source: ${t.srcCBC}`}>[1]</a>.
             {t.urgencyText2}
-            <a className="cite" href="https://www.cp24.com/local/york/2026/03/01/its-crazy-thornhill-gym-of-iranian-canadian-activist-hit-by-bullets/" target="_blank" rel="noopener noreferrer" aria-label={`Source: ${t.srcCP24}`}>[2]</a>.
+            <a className="cite" href={t.link2} target="_blank" rel="noopener noreferrer" aria-label={`Source: ${t.srcCP24}`}>[2]</a>.
             {t.urgencyText3}
-            <a className="cite" href="https://www.publicsafety.gc.ca/cnt/ntnl-scrt/cntr-trrrsm/lstd-ntts/crrnt-lstd-ntts-en.aspx" target="_blank" rel="noopener noreferrer" aria-label={`Source: ${t.srcPS}`}>[3]</a>.
+            <a className="cite" href={t.link3} target="_blank" rel="noopener noreferrer" aria-label={`Source: ${t.srcPS}`}>[3]</a>.
             {t.urgencyText4}
           </p>
         </div>
         <div className="sources-bar">
           <p>
-            [1]&nbsp;<a href="https://www.cbc.ca/news/canada/toronto/toronto-police-say-us-consulate-struck-by-gunfire-9.7121843" target="_blank" rel="noopener noreferrer">{t.srcCBC}</a>
-            &nbsp;&nbsp;[2]&nbsp;<a href="https://www.cp24.com/local/york/2026/03/01/its-crazy-thornhill-gym-of-iranian-canadian-activist-hit-by-bullets/" target="_blank" rel="noopener noreferrer">{t.srcCP24}</a>
-            &nbsp;&nbsp;[3]&nbsp;<a href="https://www.publicsafety.gc.ca/cnt/ntnl-scrt/cntr-trrrsm/lstd-ntts/crrnt-lstd-ntts-en.aspx" target="_blank" rel="noopener noreferrer">{t.srcPS}</a>
-            &nbsp;&nbsp;[4]&nbsp;<a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2010-165/index.html" target="_blank" rel="noopener noreferrer">{t.srcSEMA}</a>
+            [1]&nbsp;<a href={t.link1} target="_blank" rel="noopener noreferrer">{t.srcCBC}</a>
+            &nbsp;&nbsp;[2]&nbsp;<a href={t.link2} target="_blank" rel="noopener noreferrer">{t.srcCP24}</a>
+            &nbsp;&nbsp;[3]&nbsp;<a href={t.link3} target="_blank" rel="noopener noreferrer">{t.srcPS}</a>
+            &nbsp;&nbsp;[4]&nbsp;<a href={t.link4} target="_blank" rel="noopener noreferrer">{t.srcSEMA}</a>
           </p>
         </div>
 
