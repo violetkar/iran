@@ -306,7 +306,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="stat-card">
-                <div className="stat-number">Your ride</div>
+                <div className="stat-number">Your right</div>
                 <div className="stat-desc">
                   MPs are required by law to represent every constituent regardless
                   of party or how you voted.
