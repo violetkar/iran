@@ -501,7 +501,7 @@ export default function Home() {
           </p>
           <p className="footer-credit">
             Inspired by{' '}
-            <a href="https://www.instagram.com/salargholami/" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.instagram.com/salar_gholami_saliwan/p/DVwdmdBETG5/" target="_blank" rel="noopener noreferrer">
               Salar Gholami&rsquo;s
             </a>{' '}
             call to action on Instagram.
