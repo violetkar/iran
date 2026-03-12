@@ -160,7 +160,7 @@ export default function Home() {
     } finally {
       setLoading(false);
     }
-  }, [postalCode, lang]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [postalCode, lang, personalNote]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleKeyDown = (e) => { if (e.key === 'Enter') lookupMP(); };
 
