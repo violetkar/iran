@@ -11,14 +11,6 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
-# Redirect all traffic through Next.js (handled by the plugin above,
-# but kept here as an explicit fallback).
-[[redirects]]
-  from   = "/*"
-  to     = "/.netlify/functions/___netlify-handler"
-  status = 200
-  force  = false
-
 # Security headers applied to every response
 [[headers]]
   for = "/*"
