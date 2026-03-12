@@ -1,6 +1,7 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
+import { translations } from '../lib/translations';
 
 function getLastName(fullName) {
   if (!fullName) return 'MP';
@@ -13,50 +14,38 @@ function isGoverningParty(party) {
   return /liberal/i.test(party);
 }
 
-function buildSubject(riding) {
-  if (riding) return `Constituent Concern: IRGC-Linked Violence, ${riding}`;
-  return 'Constituent Safety Concern: IRGC-Linked Violence in Our Community';
+function buildSubject(riding, t) {
+  return t.emailSubject(riding);
 }
 
-function buildEmailBody(mpName, party, riding, personalNote) {
+function buildEmailBody(mpName, party, riding, personalNote, t) {
   const lastName = getLastName(mpName);
-  const greeting = `Dear MP ${lastName},`;
   const personalLine = personalNote && personalNote.trim()
     ? `\n${personalNote.trim()}\n`
     : '';
-  const ridingLine = riding ? `Constituent, ${riding}` : '[Your Address and Riding]';
-
   const governing = isGoverningParty(party);
 
-  const actionParagraph = governing
-    ? `I would respectfully ask you to bring the following to your caucus and the relevant ministers:`
-    : `I would ask you to raise the following in the House, in committee, and with the relevant ministers:`;
+  return `${t.emailGreeting(lastName)}
 
-  const closingLine = governing
-    ? `I trust that this government will take concrete steps to protect all Canadians, including those of Iranian heritage.`
-    : `I hope you will use your platform to call on the government to protect Iranian-Canadian communities across Canada.`;
-
-  return `${greeting}
-
-I am writing as your constituent to raise a concern about the safety of Iranian-Canadians in our community.
+${t.emailOpening}
 ${personalLine}
-On March 10, 2026, shots were fired at the U.S. Consulate in Toronto. Days before, a boxing club in Richmond Hill owned by Iranian-Canadian activist Salar Gholami was struck by 17 rounds of gunfire. These incidents follow a pattern of intimidation that security officials have linked to networks operating on behalf of Iran's Islamic Revolutionary Guard Corps.
+${t.emailIncidents}
 
-Canada already has the tools to respond. The IRGC has been a listed terrorist entity under the Criminal Code since June 2024. Sanctions can be applied through the Special Economic Measures Act (SEMA). The legal framework is in place.
+${t.emailLegal}
 
-${actionParagraph}
+${governing ? t.emailActionGov : t.emailActionOpp}
 
-1. Direct the RCMP and CSIS to investigate these incidents as IRGC-linked transnational repression and ensure those responsible are prosecuted.
-2. Use existing SEMA powers to identify and freeze assets tied to sanctioned IRGC networks operating in Canada.
-3. Engage openly with Iranian-Canadian communities about the threat and what is being done to protect them.
+${t.emailDemand1}
+${t.emailDemand2}
+${t.emailDemand3}
 
-${closingLine}
+${governing ? t.emailClosingGov : t.emailClosingOpp}
 
-I would welcome the chance to speak with you or your office about this.
+${t.emailWelcome}
 
-Sincerely,
-[Your Name]
-${ridingLine}`;
+${t.emailSincerely}
+${t.emailNamePlaceholder}
+${t.emailRidingLine(riding)}`;
 }
 
 function normalizePostalCode(raw) {
@@ -110,7 +99,21 @@ function IconArrow({ size = 18 }) {
   );
 }
 
+const toggleBtnStyle = (active) => ({
+  background: 'none',
+  border: 'none',
+  color: active ? '#ffffff' : 'rgba(255,255,255,0.45)',
+  fontWeight: active ? '700' : '400',
+  fontSize: '0.85rem',
+  cursor: 'pointer',
+  padding: '0.25rem 0.4rem',
+  letterSpacing: '0.06em',
+});
+
 export default function Home() {
+  const [lang, setLang] = useState('en');
+  const t = translations[lang];
+
   const [postalCode, setPostalCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -118,6 +121,13 @@ export default function Home() {
   const [message, setMessage] = useState('');
   const [copied, setCopied] = useState(false);
   const [personalNote, setPersonalNote] = useState('');
+
+  // Rebuild email when language changes and an MP is already loaded
+  useEffect(() => {
+    if (mp) {
+      setMessage(buildEmailBody(mp.name, mp.party, mp.riding, personalNote, translations[lang]));
+    }
+  }, [lang]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handlePostalCodeChange = (e) => {
     const raw = e.target.value.toUpperCase().replace(/[^A-Z0-9\s]/g, '');
@@ -131,14 +141,8 @@ export default function Home() {
 
   const lookupMP = useCallback(async () => {
     const code = normalizePostalCode(postalCode);
-    if (!code) {
-      setError('Please enter your postal code.');
-      return;
-    }
-    if (!/^[A-Z]\d[A-Z]\d[A-Z]\d$/.test(code)) {
-      setError('Please enter a valid 6-character Canadian postal code (e.g. M5V 3L9).');
-      return;
-    }
+    if (!code) { setError(translations[lang].errorEmpty); return; }
+    if (!/^[A-Z]\d[A-Z]\d[A-Z]\d$/.test(code)) { setError(translations[lang].errorInvalid); return; }
 
     setLoading(true);
     setError('');
@@ -148,34 +152,26 @@ export default function Home() {
     try {
       const res = await fetch(`/api/mp?postalCode=${encodeURIComponent(code)}`);
       const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error || 'Something went wrong. Please try again.');
-        return;
-      }
-
+      if (!res.ok) { setError(data.error || translations[lang].errorFallback); return; }
       setMp(data);
-      setMessage(buildEmailBody(data.name, data.party, data.riding, personalNote));
+      setMessage(buildEmailBody(data.name, data.party, data.riding, personalNote, translations[lang]));
     } catch {
-      setError('Network error - please check your connection and try again.');
+      setError(translations[lang].errorNetwork);
     } finally {
       setLoading(false);
     }
-  }, [postalCode]);
+  }, [postalCode, lang]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') lookupMP();
-  };
+  const handleKeyDown = (e) => { if (e.key === 'Enter') lookupMP(); };
 
-  // Rebuild email whenever personal note changes (after MP is loaded)
   const handlePersonalNoteChange = (e) => {
     setPersonalNote(e.target.value);
-    if (mp) setMessage(buildEmailBody(mp.name, mp.party, mp.riding, e.target.value));
+    if (mp) setMessage(buildEmailBody(mp.name, mp.party, mp.riding, e.target.value, t));
   };
 
   const buildMailtoLink = () => {
     if (!mp?.email) return '#';
-    const subject = encodeURIComponent(buildSubject(mp.riding));
+    const subject = encodeURIComponent(buildSubject(mp.riding, t));
     const body = encodeURIComponent(message);
     return `mailto:${encodeURIComponent(mp.email)}?subject=${subject}&body=${body}`;
   };
@@ -191,29 +187,17 @@ export default function Home() {
   };
 
   const mpInitials = mp?.name
-    ? mp.name
-        .split(' ')
-        .filter(Boolean)
-        .map((w) => w[0])
-        .slice(0, 2)
-        .join('')
-        .toUpperCase()
+    ? mp.name.split(' ').filter(Boolean).map((w) => w[0]).slice(0, 2).join('').toUpperCase()
     : '?';
 
   return (
     <>
       <Head>
-        <title>Contact Your MP | Canadian-Iranians for Safety &amp; Accountability</title>
-        <meta
-          name="description"
-          content="Find your Canadian federal MP and send them a message urging action on IRGC-linked violence in Canada. Enter your postal code to get started."
-        />
+        <title>{t.pageTitle}</title>
+        <meta name="description" content={t.pageDescription} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta property="og:title" content="Contact Your MP | Canadian-Iranians for Safety & Accountability" />
-        <meta
-          property="og:description"
-          content="Send your MP a message urging Canada to use the tools it already has to address IRGC-linked violence in our communities."
-        />
+        <meta property="og:title" content={t.ogTitle} />
+        <meta property="og:description" content={t.ogDescription} />
         <meta property="og:image" content="/flags.jpg" />
         <meta name="theme-color" content="#1e5428" />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -224,61 +208,54 @@ export default function Home() {
         {/* ── Hero with flag photo background ─────────────────── */}
         <header className="hero">
           <div className="hero-overlay" aria-hidden="true" />
+
+          {/* Language toggle */}
+          <div style={{ position: 'absolute', top: '1rem', right: '1.25rem', zIndex: 2 }}>
+            <button onClick={() => setLang('en')} aria-pressed={lang === 'en'} style={toggleBtnStyle(lang === 'en')}>EN</button>
+            <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.85rem' }}>|</span>
+            <button onClick={() => setLang('fr')} aria-pressed={lang === 'fr'} style={toggleBtnStyle(lang === 'fr')}>FR</button>
+          </div>
+
           <div className="hero-content">
-            <div className="hero-badge">Canadian-Iranian Community Action</div>
+            <div className="hero-badge">{t.heroBadge}</div>
             <h1>
-              Contact Your <span className="accent-red">MP</span>
+              {t.heroHeadingPre}<span className="accent-red">{t.heroHeadingAccent}</span>
             </h1>
-            <p className="hero-subtitle">
-              Urge your federal Member of Parliament to use Canada&rsquo;s existing laws
-              to address IRGC-linked violence targeting our communities.
-            </p>
+            <p className="hero-subtitle">{t.heroSubtitle}</p>
           </div>
         </header>
 
         {/* ── Our 3 Demands ─────────────────────────────────────── */}
         <section className="demands-section" aria-label="Our three demands">
           <div className="demands-inner">
-            <p className="demands-eyebrow">Our position</p>
-            <h2 className="demands-title">
-              We ask Canada to enforce its own laws and protect the Iranian-Canadian community.
-            </h2>
+            <p className="demands-eyebrow">{t.demandsEyebrow}</p>
+            <h2 className="demands-title">{t.demandsTitle}</h2>
 
             <ul className="demands-list" role="list">
               <li className="demand-item">
                 <span className="demand-number" aria-hidden="true">1</span>
-                <span className="demand-text">
-                  Direct the RCMP and CSIS to investigate the Toronto shootings as
-                  potential IRGC-linked transnational repression and prosecute those
-                  responsible.
-                </span>
+                <span className="demand-text">{t.demand1}</span>
               </li>
               <li className="demand-item">
                 <span className="demand-number" aria-hidden="true">2</span>
                 <span className="demand-text">
-                  Use existing powers under the Special Economic Measures Act (SEMA)
-                  to identify and freeze assets tied to sanctioned IRGC networks operating in Canada.
+                  {t.demand2}
                   <span className="sema-expand">
-                    SEMA allows Canada to freeze assets of designated individuals and entities. It was
-                    used against Russia after 2022. Canada already has Iran-specific SEMA regulations.{' '}
+                    {t.demand2Expand}
                     <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2010-165/index.html" target="_blank" rel="noopener noreferrer">
-                      Read the Iran regulations
+                      {t.demand2ExpandLink}
                     </a>.
                   </span>
                 </span>
               </li>
               <li className="demand-item">
                 <span className="demand-number" aria-hidden="true">3</span>
-                <span className="demand-text">
-                  Engage transparently with Iranian-Canadian communities about the
-                  threat and what federal agencies are doing to address it.
-                </span>
+                <span className="demand-text">{t.demand3}</span>
               </li>
             </ul>
 
             <p className="demands-scroll-hint">
-              If you agree, <strong>scroll down and send your MP a message.</strong>{' '}
-              It only takes two minutes.{' '}
+              {t.scrollHint}<strong>{t.scrollHintStrong}</strong>{t.scrollHintSuffix}{' '}
               <IconArrow size={14} />
             </p>
           </div>
@@ -287,23 +264,22 @@ export default function Home() {
         {/* ── Urgency bar ───────────────────────────────────────── */}
         <div className="urgency-bar" role="note">
           <p>
-            <strong>Why now:</strong>{' '}
-            Shots were fired at the U.S. Consulate in Toronto on March&nbsp;10
-            <a className="cite" href="https://www.cbc.ca/news/canada/toronto/toronto-police-say-us-consulate-struck-by-gunfire-9.7121843" target="_blank" rel="noopener noreferrer" aria-label="Source: CBC News">[1]</a>.
-            {' '}Days before, Iranian-Canadian activist Salar Gholami&rsquo;s boxing club in Richmond Hill
-            was struck by 17 rounds of gunfire
-            <a className="cite" href="https://www.cp24.com/local/york/2026/03/01/its-crazy-thornhill-gym-of-iranian-canadian-activist-hit-by-bullets/" target="_blank" rel="noopener noreferrer" aria-label="Source: CP24">[2]</a>.
-            {' '}The IRGC has been a listed terrorist entity in Canada since June 2024
-            <a className="cite" href="https://www.publicsafety.gc.ca/cnt/ntnl-scrt/cntr-trrrsm/lstd-ntts/crrnt-lstd-ntts-en.aspx" target="_blank" rel="noopener noreferrer" aria-label="Source: Public Safety Canada">[3]</a>.
-            {' '}Canada has the laws. We need enforcement.
+            <strong>{t.urgencyLabel}</strong>{' '}
+            {t.urgencyText1}
+            <a className="cite" href="https://www.cbc.ca/news/canada/toronto/toronto-police-say-us-consulate-struck-by-gunfire-9.7121843" target="_blank" rel="noopener noreferrer" aria-label={`Source: ${t.srcCBC}`}>[1]</a>.
+            {t.urgencyText2}
+            <a className="cite" href="https://www.cp24.com/local/york/2026/03/01/its-crazy-thornhill-gym-of-iranian-canadian-activist-hit-by-bullets/" target="_blank" rel="noopener noreferrer" aria-label={`Source: ${t.srcCP24}`}>[2]</a>.
+            {t.urgencyText3}
+            <a className="cite" href="https://www.publicsafety.gc.ca/cnt/ntnl-scrt/cntr-trrrsm/lstd-ntts/crrnt-lstd-ntts-en.aspx" target="_blank" rel="noopener noreferrer" aria-label={`Source: ${t.srcPS}`}>[3]</a>.
+            {t.urgencyText4}
           </p>
         </div>
         <div className="sources-bar">
           <p>
-            [1]&nbsp;<a href="https://www.cbc.ca/news/canada/toronto/toronto-police-say-us-consulate-struck-by-gunfire-9.7121843" target="_blank" rel="noopener noreferrer">CBC News</a>
-            &nbsp;&nbsp;[2]&nbsp;<a href="https://www.cp24.com/local/york/2026/03/01/its-crazy-thornhill-gym-of-iranian-canadian-activist-hit-by-bullets/" target="_blank" rel="noopener noreferrer">CP24</a>
-            &nbsp;&nbsp;[3]&nbsp;<a href="https://www.publicsafety.gc.ca/cnt/ntnl-scrt/cntr-trrrsm/lstd-ntts/crrnt-lstd-ntts-en.aspx" target="_blank" rel="noopener noreferrer">Public Safety Canada</a>
-            &nbsp;&nbsp;[4]&nbsp;<a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2010-165/index.html" target="_blank" rel="noopener noreferrer">SEMA (Iran Regulations)</a>
+            [1]&nbsp;<a href="https://www.cbc.ca/news/canada/toronto/toronto-police-say-us-consulate-struck-by-gunfire-9.7121843" target="_blank" rel="noopener noreferrer">{t.srcCBC}</a>
+            &nbsp;&nbsp;[2]&nbsp;<a href="https://www.cp24.com/local/york/2026/03/01/its-crazy-thornhill-gym-of-iranian-canadian-activist-hit-by-bullets/" target="_blank" rel="noopener noreferrer">{t.srcCP24}</a>
+            &nbsp;&nbsp;[3]&nbsp;<a href="https://www.publicsafety.gc.ca/cnt/ntnl-scrt/cntr-trrrsm/lstd-ntts/crrnt-lstd-ntts-en.aspx" target="_blank" rel="noopener noreferrer">{t.srcPS}</a>
+            &nbsp;&nbsp;[4]&nbsp;<a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2010-165/index.html" target="_blank" rel="noopener noreferrer">{t.srcSEMA}</a>
           </p>
         </div>
 
@@ -314,14 +290,12 @@ export default function Home() {
           <div className="card">
             <h2 className="card-title">
               <span className="step-badge" aria-hidden="true">1</span>
-              Find your MP by postal code
+              {t.step1Title}
             </h2>
 
             <div className="input-group">
               <div className="input-wrapper">
-                <label className="field-label" htmlFor="postal-code">
-                  Your Canadian postal code
-                </label>
+                <label className="field-label" htmlFor="postal-code">{t.postalLabel}</label>
                 <input
                   id="postal-code"
                   type="text"
@@ -332,7 +306,7 @@ export default function Home() {
                   maxLength={7}
                   autoComplete="postal-code"
                   inputMode="text"
-                  aria-label="Enter your Canadian postal code"
+                  aria-label={t.postalAriaLabel}
                   aria-describedby={error ? 'postal-error' : undefined}
                 />
               </div>
@@ -344,29 +318,23 @@ export default function Home() {
                 aria-busy={loading}
               >
                 {loading ? (
-                  <>
-                    <span className="spinner" aria-hidden="true" />
-                    Looking up…
-                  </>
+                  <><span className="spinner" aria-hidden="true" />{t.btnLookupBusy}</>
                 ) : (
-                  <>
-                    <IconSearch />
-                    Find My MP
-                  </>
+                  <><IconSearch />{t.btnLookupIdle}</>
                 )}
               </button>
             </div>
 
             {error && (
               <div className="alert alert-error" id="postal-error" role="alert" style={{ marginTop: '1rem' }}>
-                <IconAlert />
-                <span>{error}</span>
+                <IconAlert /><span>{error}</span>
               </div>
             )}
 
             <div className="personal-note-wrapper">
               <label className="personal-note-label" htmlFor="personal-note">
-                Why does this matter to you? <span className="personal-note-hint">(optional — one sentence, e.g. your Iranian heritage, your community, your city)</span>
+                {t.personalNoteLabel}{' '}
+                <span className="personal-note-hint">{t.personalNoteHint}</span>
               </label>
               <input
                 id="personal-note"
@@ -374,17 +342,17 @@ export default function Home() {
                 className="personal-note-input"
                 value={personalNote}
                 onChange={handlePersonalNoteChange}
-                placeholder="e.g. My family came to Canada from Iran, and I have friends in that community."
+                placeholder={t.personalNotePlaceholder}
               />
             </div>
           </div>
 
-          {/* Step 2 — MP info (shown after successful lookup) */}
+          {/* Step 2 — MP info */}
           {mp && (
             <div className="card" role="region" aria-label="Your MP's information">
               <h2 className="card-title">
                 <span className="step-badge" aria-hidden="true">2</span>
-                Your Member of Parliament
+                {t.step2Title}
               </h2>
 
               <div className="mp-info">
@@ -395,18 +363,15 @@ export default function Home() {
                   {mp.party && <div className="mp-party">{mp.party}</div>}
                   {mp.email ? (
                     <div className="mp-email">
-                      <IconMail size={14} />
-                      <span>{mp.email}</span>
+                      <IconMail size={14} /><span>{mp.email}</span>
                     </div>
                   ) : (
                     <div className="alert alert-error" style={{ marginTop: '0.6rem' }} role="alert">
                       <IconAlert size={16} />
                       <span>
-                        No email address found. Visit{' '}
-                        <a href="https://www.ourcommons.ca/members/en" target="_blank" rel="noopener noreferrer">
-                          ourcommons.ca
-                        </a>{' '}
-                        to contact your MP directly.
+                        {t.noEmailPre}
+                        <a href="https://www.ourcommons.ca/members/en" target="_blank" rel="noopener noreferrer">ourcommons.ca</a>
+                        {t.noEmailPost}
                       </span>
                     </div>
                   )}
@@ -420,66 +385,46 @@ export default function Home() {
             <div className="card" role="region" aria-label="Draft message to your MP">
               <h2 className="card-title">
                 <span className="step-badge" aria-hidden="true">3</span>
-                Review and send your message
+                {t.step3Title}
               </h2>
 
-              {/* Subject line display */}
               <div className="subject-row">
-                <span className="subject-label">Subject</span>
-                <span className="subject-text">{buildSubject(mp.riding)}</span>
+                <span className="subject-label">{t.subjectLabel}</span>
+                <span className="subject-text">{buildSubject(mp.riding, t)}</span>
               </div>
 
-              {/* Editable message */}
               <label className="message-label" htmlFor="message-body">
-                Your message
-                <span className="message-hint">(edit if you like)</span>
+                {t.messageLabel}
+                <span className="message-hint">{t.messageHint}</span>
               </label>
               <textarea
                 id="message-body"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                aria-label="Editable message to your MP"
+                aria-label={t.messageAriaLabel}
                 spellCheck
               />
 
-              <button
-                type="button"
-                className="copy-btn"
-                onClick={handleCopy}
-                aria-live="polite"
-              >
-                {copied ? '✓ Copied to clipboard' : 'Copy message text'}
+              <button type="button" className="copy-btn" onClick={handleCopy} aria-live="polite">
+                {copied ? t.copyCopied : t.copyIdle}
               </button>
 
               <div className="divider" role="separator" />
 
-              {/* CTA */}
               {mp.email ? (
-                <a
-                  href={buildMailtoLink()}
-                  className="btn btn-cta"
-                  role="button"
-                  aria-label={`Open email client to send message to ${mp.name}`}
-                >
+                <a href={buildMailtoLink()} className="btn btn-cta" role="button" aria-label={`Open email client to send message to ${mp.name}`}>
                   <IconMail size={22} />
-                  Send to {mp.name}
+                  {t.btnSendTo} {mp.name}
                 </a>
               ) : (
-                <a
-                  href="https://www.ourcommons.ca/members/en"
-                  className="btn btn-cta"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  role="button"
-                >
+                <a href="https://www.ourcommons.ca/members/en" className="btn btn-cta" target="_blank" rel="noopener noreferrer" role="button">
                   <IconExternalLink size={20} />
-                  Find contact info on ourcommons.ca
+                  {t.btnFindContact}
                 </a>
               )}
 
               <p style={{ marginTop: '0.85rem', fontSize: '0.82rem', color: 'var(--gray-400)', textAlign: 'center' }}>
-                Clicking the button opens your default email app with the subject and message pre-filled.
-                You can edit before sending.
+                {t.mailtoHint}
               </p>
             </div>
           )}
@@ -489,25 +434,21 @@ export default function Home() {
         {/* ── Footer ───────────────────────────────────────── */}
         <footer className="footer">
           <p>
-            MP data provided by{' '}
-            <a href="https://represent.opennorth.ca/" target="_blank" rel="noopener noreferrer">
-              Represent.ca
-            </a>{' '}
-            (Open North). This tool does not store any personal data.{' '}
-            <Link href="/privacy">Privacy Policy</Link>.
+            {t.footerData}
+            <a href="https://represent.opennorth.ca/" target="_blank" rel="noopener noreferrer">Represent.ca</a>
+            {t.footerDataSuffix}
+            <Link href="/privacy">{t.footerPrivacyLink}</Link>.
           </p>
-          <p style={{ marginTop: '0.4rem' }}>
-            Built by Canadian-Iranians for Canadian-Iranians. Use your voice. Use the law.
-          </p>
+          <p style={{ marginTop: '0.4rem' }}>{t.footerBuilt}</p>
           <p className="footer-credit">
-            Inspired by{' '}
+            {t.footerInspiredPre}
             <a href="https://www.instagram.com/salar_gholami_saliwan/p/DVwdmdBETG5/" target="_blank" rel="noopener noreferrer">
-              Salar Gholami&rsquo;s
-            </a>{' '}
-            call to action on Instagram.
+              {t.footerInspiredName}
+            </a>
+            {t.footerInspiredPost}
           </p>
           <p style={{ marginTop: '0.4rem' }}>
-            Questions or media inquiries:{' '}
+            {t.footerContact}
             <a href="mailto:baaham.ca@gmail.com">baaham.ca@gmail.com</a>
           </p>
         </footer>

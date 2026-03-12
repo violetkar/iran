@@ -1,12 +1,28 @@
+import { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
+import { translations } from '../lib/translations';
+
+const toggleBtnStyle = (active) => ({
+  background: 'none',
+  border: 'none',
+  color: active ? '#ffffff' : 'rgba(255,255,255,0.45)',
+  fontWeight: active ? '700' : '400',
+  fontSize: '0.85rem',
+  cursor: 'pointer',
+  padding: '0.25rem 0.4rem',
+  letterSpacing: '0.06em',
+});
 
 export default function Privacy() {
+  const [lang, setLang] = useState('en');
+  const t = translations[lang];
+
   return (
     <>
       <Head>
-        <title>Privacy Policy — Contact Your MP</title>
-        <meta name="description" content="Privacy policy for the Contact Your MP civic tool." />
+        <title>{t.privacyPageTitle}</title>
+        <meta name="description" content={t.privacyMetaDesc} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
       </Head>
@@ -14,76 +30,66 @@ export default function Privacy() {
       <div className="page-wrapper">
         <header className="hero" style={{ padding: '2.5rem 1.5rem 2rem' }}>
           <div className="hero-overlay" aria-hidden="true" />
+
+          {/* Language toggle */}
+          <div style={{ position: 'absolute', top: '1rem', right: '1.25rem', zIndex: 2 }}>
+            <button onClick={() => setLang('en')} aria-pressed={lang === 'en'} style={toggleBtnStyle(lang === 'en')}>EN</button>
+            <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.85rem' }}>|</span>
+            <button onClick={() => setLang('fr')} aria-pressed={lang === 'fr'} style={toggleBtnStyle(lang === 'fr')}>FR</button>
+          </div>
+
           <div className="hero-content">
             <Link href="/" style={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.85rem', textDecoration: 'none' }}>
-              ← Back to home
+              {t.privacyBackLink}
             </Link>
-            <h1 style={{ marginTop: '0.75rem' }}>Privacy Policy</h1>
+            <h1 style={{ marginTop: '0.75rem' }}>{t.privacyHeading}</h1>
           </div>
         </header>
 
         <main className="prose-page">
-          <p className="prose-updated">Last updated: March 2026</p>
+          <p className="prose-updated">{t.privacyUpdated}</p>
 
-          <p>
-            This tool is a free civic resource built to help Canadian residents contact
-            their federal Member of Parliament. It is designed to collect no personal data.
-          </p>
+          <p>{t.privacyIntro}</p>
 
-          <h2>What this tool does not do</h2>
+          <h2>{t.privacyH2WhatNot}</h2>
           <ul>
-            <li>No personal data is stored or transmitted by this site.</li>
-            <li>No cookies are used. No analytics. No tracking of any kind.</li>
-            <li>
-              The optional personal note field populates only in your own email client
-              when you click &ldquo;Open in Email Client.&rdquo; It is never sent to
-              or stored by this site.
-            </li>
+            <li>{t.privacyLi1}</li>
+            <li>{t.privacyLi2}</li>
+            <li>{t.privacyLi3}</li>
           </ul>
 
-          <h2>How it works</h2>
+          <h2>{t.privacyH2How}</h2>
           <p>
-            When you enter your postal code and click &ldquo;Find My MP&rdquo;, your
-            postal code is forwarded in real time to the publicly available{' '}
-            <a href="https://represent.opennorth.ca/" target="_blank" rel="noopener noreferrer">
-              Represent.ca API
-            </a>{' '}
-            (Open North), which returns your MP&rsquo;s name, riding, and email address.
-            This information is displayed in your browser and nothing is retained by
-            this site.
+            {t.privacyHowP1pre}
+            <a href="https://represent.opennorth.ca/" target="_blank" rel="noopener noreferrer">Represent.ca API</a>
+            {t.privacyHowP1post}
           </p>
           <p>
-            When you click &ldquo;Open in Email Client&rdquo;, your browser opens a{' '}
-            <code>mailto:</code> link. The email is composed and sent entirely through
-            your own email application. No data passes through our servers at this step.
+            {t.privacyHowP2pre}<code>{t.privacyHowP2code}</code>{t.privacyHowP2post}
           </p>
 
-          <h2>Hosting</h2>
+          <h2>{t.privacyH2Hosting}</h2>
           <p>
-            This tool is hosted on Netlify, which may capture standard server access
-            logs (IP addresses, request timestamps) as part of normal hosting operations.
-            See{' '}
-            <a href="https://www.netlify.com/privacy/" target="_blank" rel="noopener noreferrer">
-              Netlify&rsquo;s Privacy Policy
-            </a>{' '}
-            for details.
+            {t.privacyHostingPre}
+            <a href="https://www.netlify.com/privacy/" target="_blank" rel="noopener noreferrer">{t.privacyHostingLink}</a>
+            {t.privacyHostingPost}
           </p>
 
-          <h2>Contact</h2>
+          <h2>{t.privacyH2Contact}</h2>
           <p>
-            Questions or concerns:{' '}
+            {t.privacyContactPre}
             <a href="mailto:baaham.ca@gmail.com">baaham.ca@gmail.com</a>
           </p>
 
           <p style={{ marginTop: '2rem' }}>
-            <Link href="/">← Return to the tool</Link>
+            <Link href="/">{t.privacyReturnLink}</Link>
           </p>
         </main>
 
         <footer className="footer">
           <p>
-            This tool does not store any personal data.{' '}
-            <Link href="/privacy">Privacy Policy</Link>.
+            {t.privacyFooterText}
+            <Link href="/privacy">{t.footerPrivacyLink}</Link>.
           </p>
         </footer>
       </div>
