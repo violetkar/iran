@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact Your MP — Preview</title>
+  <style>
+    /* Canada + Iran colour palette — red, white, green */
+    :root {
+      --red: #D52B1E;
+      --red-dark: #A81E14;
+      --red-light: #fff0ee;
+      --green: #2D7A3A;
+      --green-dark: #1e5428;
+      --green-light: #f0f7f2;
+      --white: #ffffff;
+      --off-white: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-400: #9ca3af;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-900: #111827;
+      --radius: 8px;
+      --shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background-color: var(--off-white);
+      color: var(--gray-900);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page-wrapper { min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative;
+      color: var(--white);
+      text-align: center;
+      overflow: hidden;
+      background-color: var(--green-dark);
+      /* Place flags.jpg in the same folder as this file to see it */
+      background-image: url('flags.jpg');
+      background-size: cover;
+      background-position: center 35%;
+      padding: 4rem 1.5rem 3rem;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(20,60,28,0.80) 0%, rgba(15,45,22,0.88) 60%, rgba(0,0,0,0.72) 100%);
+    }
+    .hero-content { position: relative; z-index: 1; }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.35);
+      color: rgba(255,255,255,0.92);
+      font-size: 0.75rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 0.35rem 0.9rem; border-radius: 100px; margin-bottom: 1.25rem;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5.5vw, 3rem);
+      font-weight: 800; line-height: 1.15;
+      margin-bottom: 0.75rem; letter-spacing: -0.02em;
+    }
+    .hero h1 .accent-red { color: #ff7b6b; }
+    .hero-subtitle {
+      font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+      color: rgba(255,255,255,0.88);
+      max-width: 580px; margin: 0 auto; line-height: 1.65;
+    }
+
+    /* ── Demands ── */
+    .demands-section {
+      background: var(--white);
+      border-bottom: 3px solid var(--red);
+      padding: 2.75rem 1.5rem;
+    }
+    .demands-inner { max-width: 720px; margin: 0 auto; }
+    .demands-eyebrow {
+      font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.12em;
+      color: var(--red); margin-bottom: 0.5rem;
+    }
+    .demands-title {
+      font-size: clamp(1.5rem, 4vw, 2.1rem);
+      font-weight: 800; color: var(--gray-900);
+      margin-bottom: 1.75rem; line-height: 1.2;
+    }
+    .demands-list { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+    .demand-item {
+      display: flex; align-items: flex-start; gap: 1rem;
+      padding: 1.1rem 1.25rem;
+      background: var(--off-white);
+      border-radius: calc(var(--radius) * 1.5);
+      border-left: 4px solid var(--red);
+    }
+    .demand-number {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 2rem; height: 2rem;
+      background: var(--red); color: var(--white);
+      font-size: 0.9rem; font-weight: 800;
+      border-radius: 50%; flex-shrink: 0;
+    }
+    .demand-text { font-size: 1rem; font-weight: 600; color: var(--gray-900); line-height: 1.5; padding-top: 0.2rem; }
+    .demands-scroll-hint { margin-top: 1.75rem; text-align: center; font-size: 0.95rem; color: var(--gray-600); }
+    .demands-scroll-hint strong { color: var(--green); }
+
+    /* ── Why write ── */
+    .why-section { background: var(--green-light); border-bottom: 1px solid #b8ddbf; padding: 2rem 1.5rem; }
+    .why-inner { max-width: 720px; margin: 0 auto; }
+    .why-title { font-size: 1rem; font-weight: 700; color: var(--green-dark); margin-bottom: 1.25rem; }
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .stat-card {
+      background: var(--white); border-radius: var(--radius);
+      padding: 1rem; border: 1px solid #c8e6c9; text-align: center;
+    }
+    .stat-number { font-size: 1.65rem; font-weight: 800; color: var(--green); line-height: 1; margin-bottom: 0.3rem; }
+    .stat-desc { font-size: 0.8rem; color: var(--gray-600); line-height: 1.4; }
+
+    /* ── Urgency bar ── */
+    .urgency-bar { background: var(--red-light); border-bottom: 1px solid #fecaca; padding: 0.9rem 1.5rem; text-align: center; }
+    .urgency-bar p { color: var(--gray-700); font-size: 0.9rem; font-weight: 500; max-width: 680px; margin: 0 auto; line-height: 1.55; }
+    .urgency-bar strong { color: var(--red); }
+
+    /* ── Main ── */
+    .main { flex: 1; padding: 2rem 1.5rem 4rem; max-width: 720px; margin: 0 auto; width: 100%; }
+
+    /* ── Card ── */
+    .card {
+      background: var(--white); border-radius: calc(var(--radius) * 1.5);
+      box-shadow: var(--shadow-md); padding: 1.75rem; margin-bottom: 1.5rem;
+    }
+    .card-title {
+      font-size: 1rem; font-weight: 700; color: var(--green-dark);
+      margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;
+    }
+    .step-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 1.6rem; height: 1.6rem;
+      background: var(--red); color: var(--white);
+      font-size: 0.75rem; font-weight: 700; border-radius: 50%; flex-shrink: 0;
+    }
+
+    /* ── Form ── */
+    .input-group { display: flex; gap: 0.75rem; align-items: flex-end; }
+    .input-wrapper { flex: 1; min-width: 160px; }
+    label.field-label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.4rem; }
+    input[type="text"] {
+      width: 100%; padding: 0.7rem 1rem; font-size: 1rem;
+      border: 2px solid var(--gray-200); border-radius: var(--radius);
+      background: var(--white); color: var(--gray-900);
+      transition: border-color 0.15s, box-shadow 0.15s; outline: none; letter-spacing: 0.05em;
+    }
+    input[type="text"]:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(45,122,58,0.12); }
+    input[type="text"]::placeholder { color: var(--gray-400); }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 0.5rem; padding: 0.7rem 1.4rem;
+      font-size: 1rem; font-weight: 600; border: none;
+      border-radius: var(--radius); cursor: pointer;
+      transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+      white-space: nowrap; text-decoration: none;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn-primary { background: var(--green); color: var(--white); box-shadow: var(--shadow); }
+    .btn-primary:hover { background: var(--green-dark); box-shadow: var(--shadow-md); }
+    .btn-primary:disabled { background: var(--gray-400); cursor: not-allowed; }
+    .btn-cta {
+      width: 100%; background: var(--red); color: var(--white);
+      font-size: 1.1rem; padding: 1rem 1.5rem;
+      border-radius: calc(var(--radius) * 1.5);
+      box-shadow: 0 4px 14px rgba(213,43,30,0.35);
+    }
+    .btn-cta:hover { background: var(--red-dark); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(213,43,30,0.45); }
+
+    /* ── MP info ── */
+    .mp-info { display: flex; align-items: flex-start; gap: 1rem; }
+    .mp-avatar {
+      width: 3rem; height: 3rem; border-radius: 50%;
+      background: linear-gradient(135deg, var(--green), var(--green-dark));
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 1.25rem; color: var(--white); font-weight: 700;
+    }
+    .mp-details { flex: 1; }
+    .mp-name { font-size: 1.15rem; font-weight: 700; color: var(--gray-900); margin-bottom: 0.2rem; }
+    .mp-riding { font-size: 0.9rem; color: var(--gray-600); margin-bottom: 0.2rem; }
+    .mp-party { font-size: 0.8rem; color: var(--gray-400); font-weight: 500; }
+    .mp-email { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.85rem; color: var(--green); margin-top: 0.5rem; }
+
+    /* ── Subject row ── */
+    .subject-row {
+      display: flex; align-items: flex-start; gap: 0.6rem;
+      background: var(--green-light); border: 1px solid #c8e6c9;
+      border-radius: var(--radius); padding: 0.7rem 1rem; margin-bottom: 1rem;
+    }
+    .subject-label { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--green-dark); white-space: nowrap; padding-top: 0.05rem; }
+    .subject-text { font-size: 0.9rem; color: var(--gray-900); font-weight: 500; line-height: 1.4; }
+
+    /* ── Textarea ── */
+    .message-label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.5rem; }
+    .message-hint { font-size: 0.8rem; font-weight: 400; color: var(--gray-400); margin-left: 0.3rem; }
+    textarea {
+      width: 100%; min-height: 320px; padding: 1rem;
+      font-size: 0.9rem; font-family: inherit; line-height: 1.7;
+      border: 2px solid var(--gray-200); border-radius: var(--radius);
+      background: var(--off-white); color: var(--gray-900);
+      resize: vertical; outline: none; transition: border-color 0.15s;
+    }
+    textarea:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(45,122,58,0.1); background: var(--white); }
+
+    /* ── Misc ── */
+    .copy-btn {
+      background: none; border: 1px solid var(--gray-200); border-radius: var(--radius);
+      padding: 0.3rem 0.7rem; font-size: 0.78rem; color: var(--gray-600);
+      cursor: pointer; transition: background 0.15s; margin-top: 0.5rem;
+    }
+    .copy-btn:hover { background: var(--gray-100); }
+    .divider { height: 1px; background: var(--gray-200); margin: 1.25rem 0; }
+    .alert {
+      display: flex; align-items: flex-start; gap: 0.6rem;
+      padding: 0.85rem 1rem; border-radius: var(--radius);
+      font-size: 0.9rem; font-weight: 500; margin-top: 1rem;
+    }
+    .alert-error { background: #fef2f2; border: 1px solid #fecaca; color: var(--red); }
+    .spinner {
+      display: inline-block; width: 1em; height: 1em;
+      border: 2px solid rgba(255,255,255,0.4); border-top-color: var(--white);
+      border-radius: 50%; animation: spin 0.6s linear infinite; flex-shrink: 0;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Footer ── */
+    .footer {
+      background: var(--green-dark); color: rgba(255,255,255,0.65);
+      text-align: center; padding: 2rem 1.5rem; font-size: 0.82rem; line-height: 1.75;
+    }
+    .footer a { color: rgba(255,255,255,0.88); text-decoration: underline; }
+    .footer a:hover { color: var(--white); }
+    .footer-credit { margin-top: 0.9rem; padding-top: 0.9rem; border-top: 1px solid rgba(255,255,255,0.15); font-style: italic; color: rgba(255,255,255,0.5); }
+
+    /* ── Preview banner ── */
+    .preview-banner {
+      background: #1e293b; color: #94a3b8; text-align: center;
+      padding: 0.6rem 1rem; font-size: 0.78rem;
+    }
+    .preview-banner strong { color: #e2e8f0; }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .hero { padding: 3rem 1.25rem 2.5rem; background-position: center 25%; }
+      .demands-section, .why-section { padding: 1.75rem 1.25rem; }
+      .card { padding: 1.25rem; }
+      .input-group { flex-direction: column; align-items: stretch; }
+      .input-wrapper { min-width: 100%; }
+      .btn-primary { width: 100%; }
+      textarea { min-height: 260px; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 400px) { .stats-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<div class="page-wrapper">
+
+  <!-- Preview notice -->
+  <div class="preview-banner">
+    <strong>Local preview</strong> — MP lookup is mocked. Place <code>flags.jpg</code> in this same folder to see the hero background.
+  </div>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="hero-overlay" aria-hidden="true"></div>
+    <div class="hero-content">
+      <div class="hero-badge">Canadian-Iranian Community Action</div>
+      <h1>Contact Your <span class="accent-red">MP</span></h1>
+      <p class="hero-subtitle">
+        Urge your federal Member of Parliament to use Canada's existing laws
+        to address IRGC-linked violence targeting our communities.
+      </p>
+    </div>
+  </header>
+
+  <!-- 3 Demands -->
+  <section class="demands-section">
+    <div class="demands-inner">
+      <p class="demands-eyebrow">Our position</p>
+      <h2 class="demands-title">We are asking Canada to use the laws it already has.</h2>
+      <ul class="demands-list">
+        <li class="demand-item">
+          <span class="demand-number">1</span>
+          <span class="demand-text">Direct the RCMP and CSIS to investigate the Toronto shootings as potential IRGC-linked transnational repression and prosecute those responsible.</span>
+        </li>
+        <li class="demand-item">
+          <span class="demand-number">2</span>
+          <span class="demand-text">Apply existing SEMA powers to identify and freeze assets connected to sanctioned IRGC networks operating in Canada.</span>
+        </li>
+        <li class="demand-item">
+          <span class="demand-number">3</span>
+          <span class="demand-text">Engage transparently with Iranian-Canadian communities about the threat and what federal agencies are doing to address it.</span>
+        </li>
+      </ul>
+      <p class="demands-scroll-hint">
+        If you agree — <strong>scroll down and send your MP a message.</strong> It only takes two minutes. ↓
+      </p>
+    </div>
+  </section>
+
+  <!-- Why write -->
+  <section class="why-section">
+    <div class="why-inner">
+      <p class="why-title">Why does writing to your MP actually matter?</p>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">10×</div>
+          <div class="stat-desc">A personal constituent letter carries roughly 10× the weight of a petition signature with most MPs.</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">~95%</div>
+          <div class="stat-desc">Of MPs who receive constituent mail on an issue raise it — in caucus, committee, or the House.</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">Your ride</div>
+          <div class="stat-desc">MPs are required by law to represent every constituent regardless of party or how you voted.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Urgency bar -->
+  <div class="urgency-bar">
+    <p><strong>Why now:</strong> Shots were fired at the U.S. Consulate in Toronto on March&nbsp;10. A Richmond Hill boxing club owned by an Iranian-Canadian dissident was hit by 17 rounds of gunfire days before. Canada has the laws. We need enforcement.</p>
+  </div>
+
+  <!-- Main form -->
+  <main class="main">
+
+    <!-- Step 1 -->
+    <div class="card">
+      <h2 class="card-title">
+        <span class="step-badge">1</span>
+        Find your MP by postal code
+      </h2>
+      <div class="input-group">
+        <div class="input-wrapper">
+          <label class="field-label" for="postal-code">Your Canadian postal code</label>
+          <input id="postal-code" type="text" placeholder="M5V 3L9" maxlength="7" autocomplete="postal-code" inputmode="text" />
+        </div>
+        <button class="btn btn-primary" id="lookup-btn" onclick="lookupMP()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          Find My MP
+        </button>
+      </div>
+      <div id="postal-error" role="alert" style="display:none" class="alert alert-error">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span id="postal-error-text"></span>
+      </div>
+    </div>
+
+    <!-- Step 2 — shown after lookup -->
+    <div class="card" id="mp-card" style="display:none">
+      <h2 class="card-title">
+        <span class="step-badge">2</span>
+        Your Member of Parliament
+      </h2>
+      <div class="mp-info">
+        <div class="mp-avatar" id="mp-initials">?</div>
+        <div class="mp-details">
+          <div class="mp-name" id="mp-name"></div>
+          <div class="mp-riding" id="mp-riding"></div>
+          <div class="mp-party" id="mp-party"></div>
+          <div class="mp-email">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            <span id="mp-email-text"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3 — message editor -->
+    <div class="card" id="message-card" style="display:none">
+      <h2 class="card-title">
+        <span class="step-badge">3</span>
+        Review and send your message
+      </h2>
+      <div class="subject-row">
+        <span class="subject-label">Subject</span>
+        <span class="subject-text">Constituent Safety Concern: IRGC-Linked Violence in Our Community</span>
+      </div>
+      <label class="message-label" for="message-body">
+        Your message <span class="message-hint">— edit if you'd like</span>
+      </label>
+      <textarea id="message-body"></textarea>
+      <button type="button" class="copy-btn" id="copy-btn" onclick="copyMessage()">Copy message text</button>
+      <div class="divider"></div>
+      <a id="mailto-link" href="#" class="btn btn-cta">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        Open in Email Client
+      </a>
+      <p style="margin-top:0.85rem;font-size:0.82rem;color:var(--gray-400);text-align:center;">
+        Clicking the button opens your default email app with the subject and message pre-filled. You can edit before sending.
+      </p>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>
+      MP data provided by <a href="https://represent.opennorth.ca/" target="_blank" rel="noopener noreferrer">Represent.ca</a> (Open North).
+      This tool does not store any personal data. <a href="#">Privacy Policy</a>.
+    </p>
+    <p style="margin-top:0.4rem;">Built by Canadian-Iranians for Canadian-Iranians. Use your voice. Use the law.</p>
+    <p class="footer-credit">
+      Inspired by <a href="https://www.instagram.com/salargholami/" target="_blank" rel="noopener noreferrer">Salar Gholami's</a> call to action on Instagram.
+    </p>
+  </footer>
+
+</div>
+
+<script>
+  // Auto-format postal code input
+  document.getElementById('postal-code').addEventListener('input', function() {
+    let raw = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+    if (raw.length > 3) {
+      this.value = raw.slice(0, 3) + ' ' + raw.slice(3, 6);
+    } else {
+      this.value = raw;
+    }
+  });
+
+  document.getElementById('postal-code').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') lookupMP();
+  });
+
+  // Mock MP data for preview
+  const MOCK_MPS = {
+    default: { name: 'Omar Alghabra', riding: 'Mississauga Centre', party: 'Liberal', email: 'omar.alghabra@parl.gc.ca' }
+  };
+
+  function lookupMP() {
+    const input = document.getElementById('postal-code');
+    const code = input.value.replace(/\s/g, '').toUpperCase();
+    const errorDiv = document.getElementById('postal-error');
+    const errorText = document.getElementById('postal-error-text');
+
+    if (!code) {
+      errorText.textContent = 'Please enter your postal code.';
+      errorDiv.style.display = 'flex';
+      return;
+    }
+    if (!/^[A-Z]\d[A-Z]\d[A-Z]\d$/.test(code)) {
+      errorText.textContent = 'Please enter a valid 6-character Canadian postal code (e.g. M5V 3L9).';
+      errorDiv.style.display = 'flex';
+      return;
+    }
+
+    errorDiv.style.display = 'none';
+
+    // Simulate loading
+    const btn = document.getElementById('lookup-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Looking up…';
+
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> Find My MP';
+      showMP(MOCK_MPS.default);
+    }, 800);
+  }
+
+  function showMP(mp) {
+    document.getElementById('mp-name').textContent = mp.name;
+    document.getElementById('mp-riding').textContent = mp.riding;
+    document.getElementById('mp-party').textContent = mp.party;
+    document.getElementById('mp-email-text').textContent = mp.email;
+
+    const initials = mp.name.split(' ').filter(Boolean).map(w => w[0]).slice(0, 2).join('').toUpperCase();
+    document.getElementById('mp-initials').textContent = initials;
+
+    document.getElementById('mp-card').style.display = 'block';
+    document.getElementById('message-card').style.display = 'block';
+
+    const body = buildEmailBody(mp.name);
+    document.getElementById('message-body').value = body;
+
+    const subject = encodeURIComponent('Constituent Safety Concern: IRGC-Linked Violence in Our Community');
+    const encodedBody = encodeURIComponent(body);
+    document.getElementById('mailto-link').href = 'mailto:' + mp.email + '?subject=' + subject + '&body=' + encodedBody;
+    document.getElementById('mailto-link').textContent = '';
+    document.getElementById('mailto-link').innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg> Open in Email Client — Send to ' + mp.name;
+
+    document.getElementById('mp-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function buildEmailBody(mpName) {
+    return `Dear ${mpName},
+
+I am writing as your constituent and as a Canadian of Iranian heritage.
+
+On March 10, 2026, shots were fired at the U.S. Consulate in Toronto. Days earlier, a boxing club in Richmond Hill owned by a prominent Iranian-Canadian dissident was struck by 17 rounds of gunfire. Jewish institutions in Toronto have faced similar attacks. These incidents point to a pattern of foreign-backed intimidation that security experts and community members believe is linked to networks operating on behalf of Iran's Islamic Revolutionary Guard Corps.
+
+Canada has the tools to respond. Parliament listed the IRGC as a terrorist entity under the Criminal Code in June 2024. Just last month, the government sanctioned seven more individuals for IRGC-linked transnational repression activities targeting dissidents on Canadian soil. Canada also joined international partners in condemning Iranian state threat activity in North America. The policy framework exists. What is needed now is enforcement.
+
+Canada has demonstrated it knows how to act with resolve. When Russia launched its illegal war on Ukraine, Canada was the first country to amend the Special Economic Measures Act to allow asset seizure and forfeiture of sanctioned persons' property. The same legal architecture exists to pursue IRGC-linked assets and networks operating here.
+
+I am asking you to press the government on three specific actions:
+
+1. Direct the RCMP and CSIS to investigate the Toronto shootings as potential IRGC-linked transnational repression and prosecute those responsible
+2. Apply existing SEMA powers to identify and freeze assets connected to sanctioned IRGC networks operating in Canada
+3. Engage transparently with Iranian-Canadian communities about the threat and what federal agencies are doing to address it
+
+We are not asking for new laws. We are asking Canada to use the ones it already has. Political violence has no place in this country, and Canadians of Iranian heritage deserve the same protection as every other community.
+
+I would welcome the chance to speak with you or your office directly.
+
+Sincerely,
+[Your Name]
+[Your Address and Riding]`;
+  }
+
+  function copyMessage() {
+    const text = document.getElementById('message-body').value;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById('copy-btn');
+      btn.textContent = '✓ Copied to clipboard';
+      setTimeout(() => { btn.textContent = 'Copy message text'; }, 2000);
+    });
+  }
+</script>
+</body>
+</html>
