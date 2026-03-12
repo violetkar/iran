@@ -9,23 +9,23 @@ function buildEmailBody(mpName) {
   const greeting = mpName ? `Dear ${mpName},` : 'Dear [MP Name],';
   return `${greeting}
 
-I am writing as your constituent and as a Canadian of Iranian heritage.
+I am a constituent writing to raise an urgent safety concern.
 
-On March 10, 2026, shots were fired at the U.S. Consulate in Toronto. Days earlier, a boxing club in Richmond Hill owned by a prominent Iranian-Canadian dissident was struck by 17 rounds of gunfire. Jewish institutions in Toronto have faced similar attacks. These incidents point to a pattern of foreign-backed intimidation that security experts and community members believe is linked to networks operating on behalf of Iran's Islamic Revolutionary Guard Corps.
+On March 10, 2026, shots were fired at the U.S. Consulate in Toronto. Days earlier, a boxing club in Richmond Hill owned by a prominent Iranian-Canadian dissident was hit by 17 rounds of gunfire. Jewish institutions in Toronto have faced similar attacks. These are not isolated incidents. Security officials have described a pattern of foreign-backed intimidation tied to networks operating on behalf of Iran's Islamic Revolutionary Guard Corps.
 
-Canada has the tools to respond. Parliament listed the IRGC as a terrorist entity under the Criminal Code in June 2024. Just last month, the government sanctioned seven more individuals for IRGC-linked transnational repression activities targeting dissidents on Canadian soil. Canada also joined international partners in condemning Iranian state threat activity in North America. The policy framework exists. What is needed now is enforcement.
+Canada already has the tools to act. The IRGC was listed as a terrorist entity under the Criminal Code in June 2024. The government has sanctioned individuals for IRGC-linked activities targeting dissidents here. Canada joined international partners in condemning Iranian state threat activity in North America. The legal tools are in place. What is needed now is action.
 
-Canada has demonstrated it knows how to act with resolve. When Russia launched its illegal war on Ukraine, Canada was the first country to amend the Special Economic Measures Act to allow asset seizure and forfeiture of sanctioned persons' property. The same legal architecture exists to pursue IRGC-linked assets and networks operating here.
+Canada has moved quickly before. When Russia invaded Ukraine, Canada was the first country to amend the Special Economic Measures Act to allow asset seizure and forfeiture. The same authority exists here and should be used.
 
-I am asking you to press the government on three specific actions:
+I am asking you to push the government on three things:
 
-1. Direct the RCMP and CSIS to investigate the Toronto shootings as potential IRGC-linked transnational repression and prosecute those responsible
-2. Apply existing SEMA powers to identify and freeze assets connected to sanctioned IRGC networks operating in Canada
-3. Engage transparently with Iranian-Canadian communities about the threat and what federal agencies are doing to address it
+1. Direct the RCMP and CSIS to investigate the Toronto shootings as potential IRGC-linked transnational repression and prosecute those responsible.
+2. Use existing SEMA powers to identify and freeze assets tied to sanctioned IRGC networks operating in Canada.
+3. Engage directly and openly with Iranian-Canadian communities about the threat and what is being done to address it.
 
-We are not asking for new laws. We are asking Canada to use the ones it already has. Political violence has no place in this country, and Canadians of Iranian heritage deserve the same protection as every other community.
+We are not asking for new legislation. We are asking Canada to use the laws it already has. No community in this country should be living under the threat of foreign political violence, and Canadians of Iranian heritage deserve the same protection as everyone else.
 
-I would welcome the chance to speak with you or your office directly.
+I would be glad to speak with you or your office about this.
 
 Sincerely,
 [Your Name]
@@ -129,7 +129,7 @@ export default function Home() {
       setMp(data);
       setMessage(buildEmailBody(data.name));
     } catch {
-      setError('Network error — please check your connection and try again.');
+      setError('Network error - please check your connection and try again.');
     } finally {
       setLoading(false);
     }
@@ -169,13 +169,13 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Contact Your MP — Canadian-Iranians for Safety &amp; Accountability</title>
+        <title>Contact Your MP | Canadian-Iranians for Safety &amp; Accountability</title>
         <meta
           name="description"
           content="Find your Canadian federal MP and send them a message urging action on IRGC-linked violence in Canada. Enter your postal code to get started."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta property="og:title" content="Contact Your MP — Canadian-Iranians for Safety & Accountability" />
+        <meta property="og:title" content="Contact Your MP | Canadian-Iranians for Safety & Accountability" />
         <meta
           property="og:description"
           content="Send your MP a message urging Canada to use the tools it already has to address IRGC-linked violence in our communities."
@@ -236,7 +236,7 @@ export default function Home() {
             </ul>
 
             <p className="demands-scroll-hint">
-              If you agree — <strong>scroll down and send your MP a message.</strong>{' '}
+              If you agree, <strong>scroll down and send your MP a message.</strong>{' '}
               It only takes two minutes.{' '}
               <IconArrow size={14} />
             </p>
@@ -260,7 +260,7 @@ export default function Home() {
               <div className="stat-card">
                 <div className="stat-number">~95%</div>
                 <div className="stat-desc">
-                  Of MPs who receive constituent mail on an issue raise it — in
+                  Of MPs who receive constituent mail on an issue raise it in
                   caucus, committee, or the House.
                 </div>
               </div>
@@ -396,7 +396,7 @@ export default function Home() {
               {/* Editable message */}
               <label className="message-label" htmlFor="message-body">
                 Your message
-                <span className="message-hint">— edit if you&rsquo;d like</span>
+                <span className="message-hint">(edit if you like)</span>
               </label>
               <textarea
                 id="message-body"
@@ -426,7 +426,7 @@ export default function Home() {
                   aria-label={`Open email client to send message to ${mp.name}`}
                 >
                   <IconMail size={22} />
-                  Open in Email Client — Send to {mp.name}
+                  Send to {mp.name}
                 </a>
               ) : (
                 <a
