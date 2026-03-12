@@ -277,7 +277,7 @@ export default function Home() {
               {t.scrollHint}<strong>{t.scrollHintStrong}</strong>{t.scrollHintSuffix}{' '}
               <IconArrow size={14} />
             </p>
-            {emailCount !== null && (
+            {emailCount >= 25 && (
               <p className="email-counter">{t.emailCounter(emailCount)}</p>
             )}
           </div>
