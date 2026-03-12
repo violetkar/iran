@@ -121,6 +121,13 @@ export default function Home() {
   const [message, setMessage] = useState('');
   const [copied, setCopied] = useState(false);
   const [personalNote, setPersonalNote] = useState('');
+  const [emailCount, setEmailCount] = useState(null);
+
+  useEffect(() => {
+    fetch('/api/count').then((r) => r.json()).then((d) => {
+      if (typeof d.count === 'number') setEmailCount(d.count);
+    }).catch(() => {});
+  }, []);
 
   // Rebuild email when language changes and an MP is already loaded
   useEffect(() => {
@@ -174,6 +181,12 @@ export default function Home() {
     const subject = encodeURIComponent(buildSubject(mp.riding, t));
     const body = encodeURIComponent(message);
     return `mailto:${encodeURIComponent(mp.email)}?subject=${subject}&body=${body}`;
+  };
+
+  const handleSendClick = () => {
+    fetch('/api/count', { method: 'POST' }).then((r) => r.json()).then((d) => {
+      if (typeof d.count === 'number') setEmailCount(d.count);
+    }).catch(() => {});
   };
 
   const handleCopy = async () => {
@@ -258,6 +271,9 @@ export default function Home() {
               {t.scrollHint}<strong>{t.scrollHintStrong}</strong>{t.scrollHintSuffix}{' '}
               <IconArrow size={14} />
             </p>
+            {emailCount !== null && (
+              <p className="email-counter">{t.emailCounter(emailCount)}</p>
+            )}
           </div>
         </section>
 
@@ -412,7 +428,7 @@ export default function Home() {
               <div className="divider" role="separator" />
 
               {mp.email ? (
-                <a href={buildMailtoLink()} className="btn btn-cta" role="button" aria-label={`Open email client to send message to ${mp.name}`}>
+                <a href={buildMailtoLink()} className="btn btn-cta" role="button" aria-label={`Open email client to send message to ${mp.name}`} onClick={handleSendClick}>
                   <IconMail size={22} />
                   {t.btnSendTo} {mp.name}
                 </a>

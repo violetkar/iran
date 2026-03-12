@@ -152,6 +152,12 @@ body {
   font-size: 0.95rem; color: var(--gray-600);
 }
 .demands-scroll-hint strong { color: var(--green); }
+.email-counter {
+  margin-top: 0.75rem; text-align: center;
+  font-size: 0.9rem; font-weight: 600;
+  color: var(--green);
+  letter-spacing: 0.01em;
+}
 
 /* ─── Why write ──────────────────────────────────────────── */
 .why-section {
