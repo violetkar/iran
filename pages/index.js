@@ -5,12 +5,15 @@ import Link from 'next/link';
 const EMAIL_SUBJECT =
   'Constituent Safety Concern: IRGC-Linked Violence in Our Community';
 
-function buildEmailBody(mpName) {
+function buildEmailBody(mpName, personalNote) {
   const greeting = mpName ? `Dear ${mpName},` : 'Dear [MP Name],';
+  const personalParagraph = personalNote && personalNote.trim()
+    ? `\n${personalNote.trim()}\n`
+    : '';
   return `${greeting}
 
 I am a constituent writing to raise an urgent safety concern.
-
+${personalParagraph}
 On March 10, 2026, shots were fired at the U.S. Consulate in Toronto. Days earlier, a boxing club in Richmond Hill owned by a prominent Iranian-Canadian dissident was hit by 17 rounds of gunfire. Jewish institutions in Toronto have faced similar attacks. These are not isolated incidents. Security officials have described a pattern of foreign-backed intimidation tied to networks operating on behalf of Iran's Islamic Revolutionary Guard Corps.
 
 Canada already has the tools to act. The IRGC was listed as a terrorist entity under the Criminal Code in June 2024. The government has sanctioned individuals for IRGC-linked activities targeting dissidents here. Canada joined international partners in condemning Iranian state threat activity in North America. The legal tools are in place. What is needed now is action.
@@ -20,7 +23,7 @@ Canada has moved quickly before. When Russia invaded Ukraine, Canada was the fir
 I am asking you to push the government on three things:
 
 1. Direct the RCMP and CSIS to investigate the Toronto shootings as potential IRGC-linked transnational repression and prosecute those responsible.
-2. Use existing SEMA powers to identify and freeze assets tied to sanctioned IRGC networks operating in Canada.
+2. Use existing powers under the Special Economic Measures Act (SEMA) to identify and freeze assets tied to sanctioned IRGC networks operating in Canada.
 3. Engage directly and openly with Iranian-Canadian communities about the threat and what is being done to address it.
 
 We are not asking for new legislation. We are asking Canada to use the laws it already has. No community in this country should be living under the threat of foreign political violence, and Canadians of Iranian heritage deserve the same protection as everyone else.
@@ -90,6 +93,7 @@ export default function Home() {
   const [mp, setMp] = useState(null);
   const [message, setMessage] = useState('');
   const [copied, setCopied] = useState(false);
+  const [personalNote, setPersonalNote] = useState('');
 
   const handlePostalCodeChange = (e) => {
     const raw = e.target.value.toUpperCase().replace(/[^A-Z0-9\s]/g, '');
@@ -127,7 +131,7 @@ export default function Home() {
       }
 
       setMp(data);
-      setMessage(buildEmailBody(data.name));
+      setMessage(buildEmailBody(data.name, personalNote));
     } catch {
       setError('Network error - please check your connection and try again.');
     } finally {
@@ -137,6 +141,12 @@ export default function Home() {
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') lookupMP();
+  };
+
+  // Rebuild email whenever personal note changes (after MP is loaded)
+  const handlePersonalNoteChange = (e) => {
+    setPersonalNote(e.target.value);
+    if (mp) setMessage(buildEmailBody(mp.name, e.target.value));
   };
 
   const buildMailtoLink = () => {
@@ -222,8 +232,18 @@ export default function Home() {
               <li className="demand-item">
                 <span className="demand-number" aria-hidden="true">2</span>
                 <span className="demand-text">
-                  Apply existing SEMA powers to identify and freeze assets connected
-                  to sanctioned IRGC networks operating in Canada.
+                  Use existing powers under the{' '}
+                  <abbr className="sema-note" title="Special Economic Measures Act — Canada's sanctions law, used to freeze assets of designated persons">
+                    Special Economic Measures Act (SEMA)
+                  </abbr>
+                  {' '}to identify and freeze assets tied to sanctioned IRGC networks operating in Canada.
+                  <span className="sema-expand">
+                    SEMA allows Canada to freeze assets and impose economic restrictions on designated individuals
+                    and entities. It was already used against Russia after 2022.{' '}
+                    <a href="https://laws-lois.justice.gc.ca/eng/acts/S-14.5/" target="_blank" rel="noopener noreferrer">
+                      Read the Act
+                    </a>.
+                  </span>
                 </span>
               </li>
               <li className="demand-item">
@@ -278,10 +298,23 @@ export default function Home() {
         {/* ── Urgency bar ───────────────────────────────────────── */}
         <div className="urgency-bar" role="note">
           <p>
-            <strong>Why now:</strong> Shots were fired at the U.S. Consulate in Toronto on
-            March&nbsp;10. A Richmond Hill boxing club owned by an Iranian-Canadian dissident
-            was hit by 17 rounds of gunfire days before. Canada has the laws. We need
-            enforcement.
+            <strong>Why now:</strong>{' '}
+            Shots were fired at the U.S. Consulate in Toronto on March&nbsp;10
+            <a className="cite" href="https://www.cbc.ca/news/canada/toronto" target="_blank" rel="noopener noreferrer" aria-label="Source: CBC News">[1]</a>.
+            {' '}Days before, a Richmond Hill boxing club owned by an Iranian-Canadian dissident was hit
+            by 17 rounds of gunfire
+            <a className="cite" href="https://globalnews.ca/news/tag/iran/" target="_blank" rel="noopener noreferrer" aria-label="Source: Global News">[2]</a>.
+            {' '}The IRGC has been a listed terrorist entity in Canada since June 2024
+            <a className="cite" href="https://www.publicsafety.gc.ca/cnt/ntnl-scrt/cntr-trrrsm/lstd-ntts/crrnt-lstd-ntts-en.aspx" target="_blank" rel="noopener noreferrer" aria-label="Source: Public Safety Canada">[3]</a>.
+            {' '}Canada has the laws. We need enforcement.
+          </p>
+        </div>
+        <div className="sources-bar">
+          <p>
+            [1]&nbsp;<a href="https://www.cbc.ca/news/canada/toronto" target="_blank" rel="noopener noreferrer">CBC News</a>
+            &nbsp;&nbsp;[2]&nbsp;<a href="https://globalnews.ca/news/tag/iran/" target="_blank" rel="noopener noreferrer">Global News</a>
+            &nbsp;&nbsp;[3]&nbsp;<a href="https://www.publicsafety.gc.ca/cnt/ntnl-scrt/cntr-trrrsm/lstd-ntts/crrnt-lstd-ntts-en.aspx" target="_blank" rel="noopener noreferrer">Public Safety Canada</a>
+            &nbsp;&nbsp;[4]&nbsp;<a href="https://laws-lois.justice.gc.ca/eng/acts/S-14.5/" target="_blank" rel="noopener noreferrer">Special Economic Measures Act</a>
           </p>
         </div>
 
@@ -341,6 +374,20 @@ export default function Home() {
                 <span>{error}</span>
               </div>
             )}
+
+            <div className="personal-note-wrapper">
+              <label className="personal-note-label" htmlFor="personal-note">
+                Add a personal sentence <span className="personal-note-hint">(optional — makes your email much more effective)</span>
+              </label>
+              <textarea
+                id="personal-note"
+                className="personal-note-input"
+                rows={2}
+                value={personalNote}
+                onChange={handlePersonalNoteChange}
+                placeholder="e.g. I grew up in Richmond Hill and this community is my home."
+              />
+            </div>
           </div>
 
           {/* Step 2 — MP info (shown after successful lookup) */}
