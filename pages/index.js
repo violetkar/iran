@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
 
 const EMAIL_SUBJECT =
   'Constituent Safety Concern: IRGC-Linked Violence in Our Community';
@@ -35,14 +36,6 @@ function normalizePostalCode(raw) {
   return raw.replace(/\s+/g, '').toUpperCase();
 }
 
-function formatPostalCode(raw) {
-  const clean = normalizePostalCode(raw);
-  if (clean.length >= 4) {
-    return clean.slice(0, 3) + ' ' + clean.slice(3);
-  }
-  return clean;
-}
-
 // Icon components (inline SVG to avoid any icon library dependency)
 function IconMail({ size = 20 }) {
   return (
@@ -72,21 +65,20 @@ function IconAlert({ size = 18 }) {
   );
 }
 
-function IconUser({ size = 22 }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-      <circle cx="12" cy="7" r="4" />
-    </svg>
-  );
-}
-
 function IconExternalLink({ size = 16 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
       <polyline points="15 3 21 3 21 9" />
       <line x1="10" y1="14" x2="21" y2="3" />
+    </svg>
+  );
+}
+
+function IconArrow({ size = 18 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M12 5v14M5 12l7 7 7-7" />
     </svg>
   );
 }
@@ -101,7 +93,6 @@ export default function Home() {
 
   const handlePostalCodeChange = (e) => {
     const raw = e.target.value.toUpperCase().replace(/[^A-Z0-9\s]/g, '');
-    // Auto-insert space after 3rd character for usability
     const stripped = raw.replace(/\s/g, '');
     if (stripped.length > 3) {
       setPostalCode(stripped.slice(0, 3) + ' ' + stripped.slice(3, 6));
@@ -189,33 +180,112 @@ export default function Home() {
           property="og:description"
           content="Send your MP a message urging Canada to use the tools it already has to address IRGC-linked violence in our communities."
         />
-        <meta name="theme-color" content="#0d2545" />
+        <meta property="og:image" content="/flags.jpg" />
+        <meta name="theme-color" content="#1e5428" />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
       </Head>
 
       <div className="page-wrapper">
-        {/* ── Hero ─────────────────────────────────────────── */}
+
+        {/* ── Hero with flag photo background ─────────────────── */}
         <header className="hero">
-          <div className="hero-badge">Canadian-Iranian Community Action</div>
-          <h1>
-            Contact Your <span>MP</span>
-          </h1>
-          <p className="hero-subtitle">
-            Urge your federal Member of Parliament to use Canada&rsquo;s existing laws
-            to address IRGC-linked violence targeting our communities.
-          </p>
+          <div className="hero-overlay" aria-hidden="true" />
+          <div className="hero-content">
+            <div className="hero-badge">Canadian-Iranian Community Action</div>
+            <h1>
+              Contact Your <span className="accent-red">MP</span>
+            </h1>
+            <p className="hero-subtitle">
+              Urge your federal Member of Parliament to use Canada&rsquo;s existing laws
+              to address IRGC-linked violence targeting our communities.
+            </p>
+          </div>
         </header>
 
-        {/* ── Urgency bar ───────────────────────────────────── */}
+        {/* ── Our 3 Demands ─────────────────────────────────────── */}
+        <section className="demands-section" aria-label="Our three demands">
+          <div className="demands-inner">
+            <p className="demands-eyebrow">Our position</p>
+            <h2 className="demands-title">
+              We are asking Canada to use the laws it already has.
+            </h2>
+
+            <ul className="demands-list" role="list">
+              <li className="demand-item">
+                <span className="demand-number" aria-hidden="true">1</span>
+                <span className="demand-text">
+                  Direct the RCMP and CSIS to investigate the Toronto shootings as
+                  potential IRGC-linked transnational repression and prosecute those
+                  responsible.
+                </span>
+              </li>
+              <li className="demand-item">
+                <span className="demand-number" aria-hidden="true">2</span>
+                <span className="demand-text">
+                  Apply existing SEMA powers to identify and freeze assets connected
+                  to sanctioned IRGC networks operating in Canada.
+                </span>
+              </li>
+              <li className="demand-item">
+                <span className="demand-number" aria-hidden="true">3</span>
+                <span className="demand-text">
+                  Engage transparently with Iranian-Canadian communities about the
+                  threat and what federal agencies are doing to address it.
+                </span>
+              </li>
+            </ul>
+
+            <p className="demands-scroll-hint">
+              If you agree — <strong>scroll down and send your MP a message.</strong>{' '}
+              It only takes two minutes.{' '}
+              <IconArrow size={14} />
+            </p>
+          </div>
+        </section>
+
+        {/* ── Why write to your MP ──────────────────────────────── */}
+        <section className="why-section" aria-label="Why contacting your MP matters">
+          <div className="why-inner">
+            <p className="why-title">
+              Why does writing to your MP actually matter?
+            </p>
+            <div className="stats-grid">
+              <div className="stat-card">
+                <div className="stat-number">10×</div>
+                <div className="stat-desc">
+                  A personal constituent letter carries roughly 10&times; the weight
+                  of a petition signature with most MPs.
+                </div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-number">~95%</div>
+                <div className="stat-desc">
+                  Of MPs who receive constituent mail on an issue raise it — in
+                  caucus, committee, or the House.
+                </div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-number">Your ride</div>
+                <div className="stat-desc">
+                  MPs are required by law to represent every constituent regardless
+                  of party or how you voted.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Urgency bar ───────────────────────────────────────── */}
         <div className="urgency-bar" role="note">
           <p>
-            <strong>Why now:</strong> Shots were fired at the U.S. Consulate in Toronto on March&nbsp;10.
-            A Richmond Hill boxing club owned by an Iranian-Canadian dissident was hit by 17 rounds of
-            gunfire days before. Canada has the laws. We need enforcement.
+            <strong>Why now:</strong> Shots were fired at the U.S. Consulate in Toronto on
+            March&nbsp;10. A Richmond Hill boxing club owned by an Iranian-Canadian dissident
+            was hit by 17 rounds of gunfire days before. Canada has the laws. We need
+            enforcement.
           </p>
         </div>
 
-        {/* ── Main ──────────────────────────────────────────── */}
+        {/* ── Main ──────────────────────────────────────────────── */}
         <main className="main" id="main-content">
 
           {/* Step 1 — Postal code lookup */}
@@ -245,26 +315,24 @@ export default function Home() {
                 />
               </div>
 
-              <div style={{ paddingTop: '1.45rem' }}>
-                <button
-                  className="btn btn-primary"
-                  onClick={lookupMP}
-                  disabled={loading}
-                  aria-busy={loading}
-                >
-                  {loading ? (
-                    <>
-                      <span className="spinner" aria-hidden="true" />
-                      Looking up…
-                    </>
-                  ) : (
-                    <>
-                      <IconSearch />
-                      Find My MP
-                    </>
-                  )}
-                </button>
-              </div>
+              <button
+                className="btn btn-primary"
+                onClick={lookupMP}
+                disabled={loading}
+                aria-busy={loading}
+              >
+                {loading ? (
+                  <>
+                    <span className="spinner" aria-hidden="true" />
+                    Looking up…
+                  </>
+                ) : (
+                  <>
+                    <IconSearch />
+                    Find My MP
+                  </>
+                )}
+              </button>
             </div>
 
             {error && (
@@ -362,7 +430,7 @@ export default function Home() {
                 </a>
               ) : (
                 <a
-                  href={`https://www.ourcommons.ca/members/en`}
+                  href="https://www.ourcommons.ca/members/en"
                   className="btn btn-cta"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -389,20 +457,21 @@ export default function Home() {
             <a href="https://represent.opennorth.ca/" target="_blank" rel="noopener noreferrer">
               Represent.ca
             </a>{' '}
-            (Open North). This tool does not store any personal data.
+            (Open North). This tool does not store any personal data.{' '}
+            <Link href="/privacy">Privacy Policy</Link>.
           </p>
           <p style={{ marginTop: '0.4rem' }}>
-            Built by Canadian-Iranians for Canadian-Iranians. &nbsp;|&nbsp; Use your voice. Use the law.
+            Built by Canadian-Iranians for Canadian-Iranians. Use your voice. Use the law.
+          </p>
+          <p className="footer-credit">
+            Inspired by{' '}
+            <a href="https://www.instagram.com/salargholami/" target="_blank" rel="noopener noreferrer">
+              Salar Gholami&rsquo;s
+            </a>{' '}
+            call to action on Instagram.
           </p>
         </footer>
       </div>
-
-      <style jsx global>{`
-        /* Scoped overrides — anything not in globals.css */
-        .urgency-bar strong {
-          color: var(--gold-400);
-        }
-      `}</style>
     </>
   );
 }
