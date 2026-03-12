@@ -14,13 +14,13 @@ function isGoverningParty(party) {
 }
 
 function buildSubject(riding) {
-  if (riding) return `Constituent Concern: IRGC-Linked Violence — ${riding}`;
+  if (riding) return `Constituent Concern: IRGC-Linked Violence, ${riding}`;
   return 'Constituent Safety Concern: IRGC-Linked Violence in Our Community';
 }
 
 function buildEmailBody(mpName, party, riding, personalNote) {
   const lastName = getLastName(mpName);
-  const greeting = `Dear Mr./Ms. ${lastName},`;
+  const greeting = `Dear MP ${lastName},`;
   const personalLine = personalNote && personalNote.trim()
     ? `\n${personalNote.trim()}\n`
     : '';
@@ -29,28 +29,30 @@ function buildEmailBody(mpName, party, riding, personalNote) {
   const governing = isGoverningParty(party);
 
   const actionParagraph = governing
-    ? `As a member of the governing party, you have direct influence over these decisions. I am asking you to bring the following to your caucus and the relevant ministers:`
-    : `I am asking you to hold the government accountable on the following and raise them in the House, in committee, and with the relevant ministers:`;
+    ? `I would respectfully ask you to bring the following to your caucus and the relevant ministers:`
+    : `I would ask you to raise the following in the House, in committee, and with the relevant ministers:`;
 
   const closingLine = governing
-    ? `Canada has the laws. Your government has the mandate. Please act.`
-    : `No community should live under the threat of foreign political violence. Please use your platform to push for action.`;
+    ? `I trust that this government will take concrete steps to protect all Canadians, including those of Iranian heritage.`
+    : `I hope you will use your platform to call on the government to protect Iranian-Canadian communities across Canada.`;
 
   return `${greeting}
 
-I am a constituent writing to raise an urgent safety concern.
+I am writing as your constituent to raise a concern about the safety of Iranian-Canadians in our community.
 ${personalLine}
-On March 10, 2026, shots were fired at the U.S. Consulate in Toronto. Days before, a boxing club in Richmond Hill owned by an Iranian-Canadian dissident was hit by 17 rounds of gunfire. Security officials have described a pattern of foreign intimidation tied to Iran's Islamic Revolutionary Guard Corps operating on Canadian soil.
+On March 10, 2026, shots were fired at the U.S. Consulate in Toronto. Days before, a boxing club in Richmond Hill owned by Iranian-Canadian activist Salar Gholami was struck by 17 rounds of gunfire. These incidents follow a pattern of intimidation that security officials have linked to networks operating on behalf of Iran's Islamic Revolutionary Guard Corps.
 
-The legal tools are already in place. The IRGC has been a listed terrorist entity under the Criminal Code since June 2024. Canada has sanctions authority under the Special Economic Measures Act (SEMA). What is missing is enforcement.
+Canada already has the tools to respond. The IRGC has been a listed terrorist entity under the Criminal Code since June 2024. Sanctions can be applied through the Special Economic Measures Act (SEMA). The legal framework is in place.
 
 ${actionParagraph}
 
-1. Direct the RCMP and CSIS to investigate these incidents as IRGC-linked transnational repression and prosecute those responsible.
-2. Use existing SEMA powers to identify and freeze assets tied to sanctioned IRGC networks in Canada.
-3. Engage openly with Iranian-Canadian communities about the threat and what is being done.
+1. Direct the RCMP and CSIS to investigate these incidents as IRGC-linked transnational repression and ensure those responsible are prosecuted.
+2. Use existing SEMA powers to identify and freeze assets tied to sanctioned IRGC networks operating in Canada.
+3. Engage openly with Iranian-Canadian communities about the threat and what is being done to protect them.
 
 ${closingLine}
+
+I would welcome the chance to speak with you or your office about this.
 
 Sincerely,
 [Your Name]
@@ -239,7 +241,7 @@ export default function Home() {
           <div className="demands-inner">
             <p className="demands-eyebrow">Our position</p>
             <h2 className="demands-title">
-              We are asking Canada to use the laws it already has.
+              We ask Canada to enforce its own laws and protect the Iranian-Canadian community.
             </h2>
 
             <ul className="demands-list" role="list">
@@ -254,16 +256,13 @@ export default function Home() {
               <li className="demand-item">
                 <span className="demand-number" aria-hidden="true">2</span>
                 <span className="demand-text">
-                  Use existing powers under the{' '}
-                  <abbr className="sema-note" title="Special Economic Measures Act — Canada's sanctions law, used to freeze assets of designated persons">
-                    Special Economic Measures Act (SEMA)
-                  </abbr>
-                  {' '}to identify and freeze assets tied to sanctioned IRGC networks operating in Canada.
+                  Use existing powers under the Special Economic Measures Act (SEMA)
+                  to identify and freeze assets tied to sanctioned IRGC networks operating in Canada.
                   <span className="sema-expand">
-                    SEMA allows Canada to freeze assets and impose economic restrictions on designated individuals
-                    and entities. It was already used against Russia after 2022.{' '}
-                    <a href="https://laws-lois.justice.gc.ca/eng/acts/S-14.5/" target="_blank" rel="noopener noreferrer">
-                      Read the Act
+                    SEMA allows Canada to freeze assets of designated individuals and entities. It was
+                    used against Russia after 2022. Canada already has Iran-specific SEMA regulations.{' '}
+                    <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2010-165/index.html" target="_blank" rel="noopener noreferrer">
+                      Read the Iran regulations
                     </a>.
                   </span>
                 </span>
@@ -322,10 +321,10 @@ export default function Home() {
           <p>
             <strong>Why now:</strong>{' '}
             Shots were fired at the U.S. Consulate in Toronto on March&nbsp;10
-            <a className="cite" href="https://www.cbc.ca/news/canada/toronto" target="_blank" rel="noopener noreferrer" aria-label="Source: CBC News">[1]</a>.
-            {' '}Days before, a Richmond Hill boxing club owned by an Iranian-Canadian dissident was hit
-            by 17 rounds of gunfire
-            <a className="cite" href="https://globalnews.ca/news/tag/iran/" target="_blank" rel="noopener noreferrer" aria-label="Source: Global News">[2]</a>.
+            <a className="cite" href="https://www.cbc.ca/news/canada/toronto/toronto-police-say-us-consulate-struck-by-gunfire-9.7121843" target="_blank" rel="noopener noreferrer" aria-label="Source: CBC News">[1]</a>.
+            {' '}Days before, Iranian-Canadian activist Salar Gholami&rsquo;s boxing club in Richmond Hill
+            was struck by 17 rounds of gunfire
+            <a className="cite" href="https://www.cp24.com/local/york/2026/03/01/its-crazy-thornhill-gym-of-iranian-canadian-activist-hit-by-bullets/" target="_blank" rel="noopener noreferrer" aria-label="Source: CP24">[2]</a>.
             {' '}The IRGC has been a listed terrorist entity in Canada since June 2024
             <a className="cite" href="https://www.publicsafety.gc.ca/cnt/ntnl-scrt/cntr-trrrsm/lstd-ntts/crrnt-lstd-ntts-en.aspx" target="_blank" rel="noopener noreferrer" aria-label="Source: Public Safety Canada">[3]</a>.
             {' '}Canada has the laws. We need enforcement.
@@ -333,10 +332,10 @@ export default function Home() {
         </div>
         <div className="sources-bar">
           <p>
-            [1]&nbsp;<a href="https://www.cbc.ca/news/canada/toronto" target="_blank" rel="noopener noreferrer">CBC News</a>
-            &nbsp;&nbsp;[2]&nbsp;<a href="https://globalnews.ca/news/tag/iran/" target="_blank" rel="noopener noreferrer">Global News</a>
+            [1]&nbsp;<a href="https://www.cbc.ca/news/canada/toronto/toronto-police-say-us-consulate-struck-by-gunfire-9.7121843" target="_blank" rel="noopener noreferrer">CBC News</a>
+            &nbsp;&nbsp;[2]&nbsp;<a href="https://www.cp24.com/local/york/2026/03/01/its-crazy-thornhill-gym-of-iranian-canadian-activist-hit-by-bullets/" target="_blank" rel="noopener noreferrer">CP24</a>
             &nbsp;&nbsp;[3]&nbsp;<a href="https://www.publicsafety.gc.ca/cnt/ntnl-scrt/cntr-trrrsm/lstd-ntts/crrnt-lstd-ntts-en.aspx" target="_blank" rel="noopener noreferrer">Public Safety Canada</a>
-            &nbsp;&nbsp;[4]&nbsp;<a href="https://laws-lois.justice.gc.ca/eng/acts/S-14.5/" target="_blank" rel="noopener noreferrer">Special Economic Measures Act</a>
+            &nbsp;&nbsp;[4]&nbsp;<a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2010-165/index.html" target="_blank" rel="noopener noreferrer">SEMA (Iran Regulations)</a>
           </p>
         </div>
 
@@ -401,13 +400,13 @@ export default function Home() {
               <label className="personal-note-label" htmlFor="personal-note">
                 Why does this matter to you? <span className="personal-note-hint">(optional — one sentence, e.g. your Iranian heritage, your community, your city)</span>
               </label>
-              <textarea
+              <input
                 id="personal-note"
+                type="text"
                 className="personal-note-input"
-                rows={2}
                 value={personalNote}
                 onChange={handlePersonalNoteChange}
-                placeholder="e.g. My family came to Canada from Iran, and I have friends in that Richmond Hill community."
+                placeholder="e.g. My family came to Canada from Iran, and I have friends in that community."
               />
             </div>
           </div>

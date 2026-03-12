@@ -43,7 +43,7 @@ body {
   background-color: var(--red-hero);
   background-image: url('/flags.jpg');
   background-size: cover;
-  background-position: center 35%;
+  background-position: 65% 60%;
   padding: 4.5rem 1.5rem 3.5rem;
 }
 
@@ -249,9 +249,8 @@ body {
   width: 100%; padding: 0.6rem 0.85rem; font-size: 0.9rem;
   font-family: inherit; border: 1px solid var(--gray-200);
   border-radius: var(--radius); background: var(--white);
-  color: var(--gray-900); resize: none; outline: none;
+  color: var(--gray-900); outline: none;
   transition: border-color 0.15s;
-  line-height: 1.5;
 }
 .personal-note-input:focus { border-color: var(--red); box-shadow: 0 0 0 2px rgba(200,40,26,0.10); }
 
