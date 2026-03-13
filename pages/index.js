@@ -38,6 +38,7 @@ ${governing ? t.emailActionGov : t.emailActionOpp}
 ${t.emailDemand1}
 ${t.emailDemand2}
 ${t.emailDemand3}
+${t.emailDemand4}
 
 ${governing ? t.emailClosingGov : t.emailClosingOpp}
 
@@ -245,7 +246,7 @@ export default function Home() {
         </header>
 
         {/* ── Our 3 Demands ─────────────────────────────────────── */}
-        <section className="demands-section" aria-label="Our three demands">
+        <section className="demands-section" aria-label="Our four demands">
           <div className="demands-inner">
             <p className="demands-eyebrow">{t.demandsEyebrow}</p>
             <h2 className="demands-title">{t.demandsTitle}</h2>
@@ -271,6 +272,10 @@ export default function Home() {
                 <span className="demand-number" aria-hidden="true">3</span>
                 <span className="demand-text">{t.demand3}</span>
               </li>
+              <li className="demand-item">
+                <span className="demand-number" aria-hidden="true">4</span>
+                <span className="demand-text">{t.demand4}</span>
+              </li>
             </ul>
 
             <p className="demands-scroll-hint">
@@ -292,16 +297,19 @@ export default function Home() {
             {t.urgencyText2}
             <a className="cite" href={t.link2} target="_blank" rel="noopener noreferrer" aria-label={`Source: ${t.srcCP24}`}>[2]</a>.
             {t.urgencyText3}
-            <a className="cite" href={t.link3} target="_blank" rel="noopener noreferrer" aria-label={`Source: ${t.srcPS}`}>[3]</a>.
+            <a className="cite" href={t.link3} target="_blank" rel="noopener noreferrer" aria-label={`Source: ${t.srcGlobe}`}>[3]</a>.
             {t.urgencyText4}
+            <a className="cite" href={t.link5} target="_blank" rel="noopener noreferrer" aria-label={`Source: ${t.srcPS}`}>[4]</a>.
+            {t.urgencyText5}
           </p>
         </div>
         <div className="sources-bar">
           <p>
             [1]&nbsp;<a href={t.link1} target="_blank" rel="noopener noreferrer">{t.srcCBC}</a>
             &nbsp;&nbsp;[2]&nbsp;<a href={t.link2} target="_blank" rel="noopener noreferrer">{t.srcCP24}</a>
-            &nbsp;&nbsp;[3]&nbsp;<a href={t.link3} target="_blank" rel="noopener noreferrer">{t.srcPS}</a>
-            &nbsp;&nbsp;[4]&nbsp;<a href={t.link4} target="_blank" rel="noopener noreferrer">{t.srcSEMA}</a>
+            &nbsp;&nbsp;[3]&nbsp;<a href={t.link3} target="_blank" rel="noopener noreferrer">{t.srcGlobe}</a>
+            &nbsp;&nbsp;[4]&nbsp;<a href={t.link5} target="_blank" rel="noopener noreferrer">{t.srcPS}</a>
+            &nbsp;&nbsp;[5]&nbsp;<a href={t.link4} target="_blank" rel="noopener noreferrer">{t.srcSEMA}</a>
           </p>
         </div>
 
