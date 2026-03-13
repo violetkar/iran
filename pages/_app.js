@@ -5,13 +5,7 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <Head>
-        {process.env.NEXT_PUBLIC_UMAMI_ID && (
-          <script
-            async
-            src="https://analytics.umami.is/script.js"
-            data-website-id={process.env.NEXT_PUBLIC_UMAMI_ID}
-          />
-        )}
+        <script defer src="https://cloud.umami.is/script.js" data-website-id="09381e82-0cdc-4a50-aea8-2d29142c49d3" />
       </Head>
       <Component {...pageProps} />
     </>
